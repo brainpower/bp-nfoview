@@ -1,0 +1,17 @@
+Source: bp-nfoview
+Section: utils
+Priority: extra
+Maintainer: brainpower <brainpower@gulli.com>
+Build-Depends: debhelper (>= 8.0.0), cmake, qt4-dev-tools, libqt4-dev
+Standards-Version: 3.9.2
+Homepage:
+#Vcs-Git: git://git.debian.org/collab-maint/bp-nfoview.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/bp-nfoview.git;a=summary
+
+Package: bp-nfoview
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: A Simple NFO-Viewer by brainpower
+ bp-nfoview is a simple viewer for NFO files, which are "ASCII" art in
+ the CP437 codepage. The advantages of using NFO Viewer instead of a
+ text editor are preset font, color and encoding settings.

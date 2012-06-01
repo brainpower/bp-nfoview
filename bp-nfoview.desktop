@@ -1,0 +1,16 @@
+[Desktop Entry]
+Encoding=UTF-8
+Comment=Simple NFO-Viewer by brainpower
+Comment[de_DE]=Einfacher NFO-Viewer von brainpower
+Exec=bp-nfoview %f
+Hidden=false
+Icon=bp-nfoview
+Icon[de_DE]=bp-nfoview
+Name=bp-nfoview
+Name[de_DE]=bp-nfoview
+Terminal=false
+Type=Application
+Version=1.0
+MimeType=text/x-nfo;
+Categories=Application;
+StartupNotify=true
