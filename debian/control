@@ -5,8 +5,8 @@ Maintainer: brainpower <brainpower@gulli.com>
 Build-Depends: debhelper (>= 8.0.0), cmake, qt4-dev-tools, libqt4-dev
 Standards-Version: 3.9.2
 Homepage:
-#Vcs-Git: git://git.debian.org/collab-maint/bp-nfoview.git
-#Vcs-Browser: http://git.debian.org/?p=collab-maint/bp-nfoview.git;a=summary
+Vcs-Git: git://github.com/brainpower/bp-nfoview.git
+Vcs-Browser: https://github.com/brainpower/bp-nfoview
 
 Package: bp-nfoview
 Architecture: any
