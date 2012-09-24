@@ -2,8 +2,8 @@
 #                                                                              #
 NAME = "bp-nfoview"                                                            #
 AUTHOR = "brainpower@gulli.com"                                                #
-VERSION = "0.1.0"                                                              #
-LICENCE = "GPL v2"                                                             #
+VERSION = "0.1.1"                                                              #
+LICENCE = "GPL-3"                                                              #
 DESC = 'A simple lightweight nfo-viewer written in C++ with Qt4 Interface'     #
 #                                                                              #
 # This program comes with ABSOLUTELY NO WARRANTY                               #
@@ -20,34 +20,22 @@ DESC = 'A simple lightweight nfo-viewer written in C++ with Qt4 Interface'     #
 # You should have received a copy of the GNU General Public License along with #
 # this program; if not, see <http://www.gnu.org/licenses/>.                    #
 #                                                                              #
-# Copyright (c) 2010  brainpower@gulli.com                                     #
+# Copyright (c) 2010-2012  brainpower@gulli.com                                #
 #                                                                              #
 #############################################################################**/
-/********************************************************************************
-** original Form generated from reading UI file 'bp-nfoview.ui'
-**
-** Created: Sat May 21 17:38:08 2011
-**      by: Qt User Interface Compiler version 4.7.2
-**
-** WARNING! All changes made in this file will be lost when recompiling UI file!
-********************************************************************************/
 
 #ifndef BP_NFOVIEW_H
 #define BP_NFOVIEW_H
 
 #ifndef MAIN_VERSION
-#define MAIN_VERSION "0.1.0"
+#define MAIN_VERSION "0.1.1"
 #endif // VERSION
 
 // ## Qt4 includes:
-//#include <QtCore/QVariant>
 #include <QtCore/QFile>
 #include <QtCore/QSettings>
-
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
-//#include <QtGui/QButtonGroup>
-//#include <QtGui/QHeaderView>
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenu>
 #include <QtGui/QMenuBar>

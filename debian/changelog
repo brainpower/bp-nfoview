@@ -1,3 +1,9 @@
+bp-nfoview (0.1.1-1~precise1) precise; urgency=low
+
+  * some fixups
+
+ -- brainpower <brainpower@gulli.com>  Mon, 24 Sep 2012 22:23:52 +0200
+
 bp-nfoview (0.1.0-1~precise1) precise; urgency=low
 
   * Initial release

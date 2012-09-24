@@ -2,8 +2,8 @@
 #                                                                              #
 NAME = "bp-nfoview"                                                            #
 AUTHOR = "brainpower@gulli.com"                                                #
-VERSION = "0.1.0"                                                              #
-LICENCE = "GPL v2"                                                             #
+VERSION = "0.1.1"                                                              #
+LICENCE = "GPL-3"                                                              #
 DESC = 'A simple lightweight nfo-viewer written in C++ with Qt4 Interface'     #
 #                                                                              #
 # This program comes with ABSOLUTELY NO WARRANTY                               #
@@ -20,7 +20,7 @@ DESC = 'A simple lightweight nfo-viewer written in C++ with Qt4 Interface'     #
 # You should have received a copy of the GNU General Public License along with #
 # this program; if not, see <http://www.gnu.org/licenses/>.                    #
 #                                                                              #
-# Copyright (c) 2010  brainpower@gulli.com                                     #
+# Copyright (c) 2010-2012  brainpower@gulli.com                                #
 #                                                                              #
 #############################################################################**/
 #include "bp-nfoview.h"
@@ -166,8 +166,7 @@ void Ui::Ui_MainWindow::OpenAction(){
 }
 
 void Ui::Ui_MainWindow::AboutAction(){
-//#warning: TODO: implement AboutDialog!
-	Ui::Dialog_About *aboutDialog = new Ui::Dialog_About();
+	Ui::Dialog_About *aboutDialog = new Ui::Dialog_About(this);
 	aboutDialog->show();
 }
 
@@ -176,8 +175,6 @@ void Ui::Ui_MainWindow::ColorAction(){
 	QPalette p = textEdit->palette();
 	QColor bg = QColorDialog::getColor(p.color(QPalette::Base), this,"Choose Background Color");
 	QColor fg = QColorDialog::getColor(p.color(QPalette::WindowText), this,"Choose Text Color");
-	//textEdit->setTextBackgroundColor(bg);
-	//textEdit->setTextColor(fg);
 	p.setColor(QPalette::Base, bg);
 	p.setColor(QPalette::WindowText, fg);
 	p.setColor(QPalette::Text, fg);
@@ -189,14 +186,8 @@ void Ui::Ui_MainWindow::ColorAction(){
 
 void Ui::Ui_MainWindow::DefaultColorAction(){
 	QSettings settings(QSettings::IniFormat, QSettings::UserScope,"brainpower", "bp-nfoview");
-	//QColor bg =defaultPalette.color(QPalette::Base);
-	//QColor fg = defaultPalette.color(QPalette::WindowText);
-	//textEdit->setTextBackgroundColor(bg);
-	//textEdit->setTextColor(fg);
-	//QPalette p;
 	textEdit->setPalette(defaultPalette);
 	settings.remove("GUI/colors");
-	//textEdit->setAutoFillBackground(true);
 	textEdit->repaint();
 }
 
@@ -219,14 +210,17 @@ void Ui::Ui_MainWindow::loadFile(QString path){
 	if(nfofile.exists()){
 		nfofile.open(QIODevice::ReadOnly | QIODevice::Text);
 		QString nline;
+		QCodePage437Codec *codec = new QCodePage437Codec();
+		QByteArray line;
 		while(!nfofile.atEnd()){
-			QByteArray line = nfofile.readLine();
-			QTextCodec *codec = new QCodePage437Codec();
-			nline.append(codec->toUnicode(line));// //#codec->toUnicode();
-			//gui.textEdit->append(nline);
+			line = nfofile.readLine();
+			nline.append(codec->toUnicode(line));
 		}
 		textEdit->setText(nline);
 		if(sboffset!=0)	statusbar->showMessage(QString("'")+path+QString("' loaded."));
+		nfofile.close();
+		delete codec;
+		codec = 0;
 	}
 }
 

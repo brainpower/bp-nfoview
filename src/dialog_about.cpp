@@ -2,8 +2,8 @@
 #                                                                              #
 NAME = "bp-nfoview"                                                            #
 AUTHOR = "brainpower@gulli.com"                                                #
-VERSION = "0.1.0"                                                              #
-LICENCE = "GPL v2"                                                             #
+VERSION = "0.1.1"                                                              #
+LICENCE = "GPL-3"                                                              #
 DESC = 'A simple lightweight nfo-viewer written in C++ with Qt4 Interface'     #
 #                                                                              #
 # This program comes with ABSOLUTELY NO WARRANTY                               #
@@ -20,12 +20,12 @@ DESC = 'A simple lightweight nfo-viewer written in C++ with Qt4 Interface'     #
 # You should have received a copy of the GNU General Public License along with #
 # this program; if not, see <http://www.gnu.org/licenses/>.                    #
 #                                                                              #
-# Copyright (c) 2010  brainpower@gulli.com                                     #
+# Copyright (c) 2010-2012  brainpower@gulli.com                                #
 #                                                                              #
 #############################################################################**/
 #include "dialog_about.h"
 
-Ui::Dialog_About::Dialog_About(){
+Ui::Dialog_About::Dialog_About(QWidget *parent): QDialog(parent) {
 	setObjectName("Dialog_About");
 	setWindowTitle("About");
 	resize(380, 312);
@@ -64,7 +64,7 @@ Ui::Dialog_About::Dialog_About(){
 	aboutText += "<br>AboutDialog ";
 	aboutText += DIALOG_ABOUT_VERSION;
 
-	aboutText += "<br><br>Copyright (c) 2011 &lt;brainpower@gulli.com&gt; <br>licensed under GPL<br> See <a href=\"http://www.gnu.org/licenses/gpl.html\">http://www.gnu.org/licenses/</a> for more info";
+	aboutText += "<br><br>Copyright (c) 2010-2012 &lt;brainpower@gulli.com&gt; <br>licensed under GPL-3<br> See <a href=\"http://www.gnu.org/licenses/gpl.html\">http://www.gnu.org/licenses/</a> for more info";
 	label->setText(aboutText);
 
 	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));

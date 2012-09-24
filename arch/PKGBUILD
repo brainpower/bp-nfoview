@@ -1,7 +1,7 @@
-# Maintainer: brainpower <brainpower@gulli.com>
+# Maintainer: brainpower <brainpower at gulli dot com>
 
 pkgname="bp-nfoview"
-pkgver=0.1.0
+pkgver=0.1.1
 pkgrel=1
 pkgdesc="A Simple NFO-Viewer by brainpower"
 arch=('i686' 'x86_64')
