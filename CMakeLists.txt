@@ -13,7 +13,7 @@ IF(WIN32)
 	SET(GUI_TYPE WIN32)
 	ADD_DEFINITIONS(-pipe -frtti -fexceptions -mthreads -Wall -enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -Wl,-s -mthreads -Wl,-subsystem,windows -static)
 
-	set(W32_LIBS mingw32 qtmain QtGui comdlg32 oleaut32 imm32 winmm winspool jpeg mng lcms tiff msimg32 png15 QtCore ssl crypto gdi32 crypt32 kernel32 user32 shell32 uuid ole32 advapi32 ws2_32 z intl iconv)
+	set(W32_LIBS mingw32 comdlg32 oleaut32 imm32 winmm winspool jpeg mng lcms tiff msimg32 png16 ssl crypto gdi32 crypt32 kernel32 user32 shell32 uuid ole32 advapi32 ws2_32 z lzma intl iconv)
 ENDIF(WIN32)
 IF(CMAKE_TOOLCHAIN_FILE)
 ENDIF(CMAKE_TOOLCHAIN_FILE)

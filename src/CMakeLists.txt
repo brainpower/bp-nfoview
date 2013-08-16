@@ -10,10 +10,7 @@ ADD_EXECUTABLE(bp-nfoview ${HDRS} ${SRCS} ${bp_nfoview_MOC_SRCS} ${bp_nfoview_RC
 
 IF(WIN32)
 SET_TARGET_PROPERTIES(bp-nfoview PROPERTIES LINK_FLAGS "-Wl,-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -Wl,-s -mthreads -Wl,-subsystem,windows -static")
-target_link_libraries(bp-nfoview QtGui QtCore ${W32_LIBS})
+target_link_libraries(bp-nfoview ${QT_LIBRARIES} ${W32_LIBS})
 ELSE()
 target_link_libraries(bp-nfoview  ${QT_LIBRARIES})
 ENDIF(WIN32)
-
-
-
