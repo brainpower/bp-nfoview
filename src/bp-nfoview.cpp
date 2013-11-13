@@ -193,7 +193,7 @@ void Ui::Ui_MainWindow::DefaultColorAction(){
 
 void Ui::Ui_MainWindow::FontAction(){
 	QSettings settings(QSettings::IniFormat, QSettings::UserScope,"brainpower", "bp-nfoview");
-	QFont font = QFontDialog::getFont(0, textEdit->font(), this, "Select Font - Monospace recommended");
+	QFont font = QFontDialog::getFont(0, textEdit->font(), this, "Select Font - fixed size font recommended");
 	textEdit->setFont(font);
 	settings.setValue("GUI/font",font);
 }
