@@ -2,7 +2,7 @@
 #                                                                              #
 NAME = "bp-nfoview"                                                            #
 AUTHOR = "brainpower@gulli.com"                                                #
-VERSION = "0.1.1"                                                              #
+VERSION = "0.1.2"                                                              #
 LICENCE = "GPL-3"                                                              #
 DESC = 'A simple lightweight nfo-viewer written in C++ with Qt4 Interface'     #
 #                                                                              #
@@ -20,7 +20,7 @@ DESC = 'A simple lightweight nfo-viewer written in C++ with Qt4 Interface'     #
 # You should have received a copy of the GNU General Public License along with #
 # this program; if not, see <http://www.gnu.org/licenses/>.                    #
 #                                                                              #
-# Copyright (c) 2010-2012  brainpower@gulli.com                                #
+# Copyright (c) 2010-2013  brainpower@gulli.com                                #
 #                                                                              #
 #############################################################################**/
 #include "dialog_charbox.h"
