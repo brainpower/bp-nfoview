@@ -248,7 +248,7 @@ void Ui::Ui_MainWindow::saveAsImage(QString path){
 	//pa->drawLine(0,140,320,140);
 	pa->end();
 	pixmap.save(path);
-
+	delete pa; pa = 0;
 }
 
 int main( int argc, char* argv[] ){
