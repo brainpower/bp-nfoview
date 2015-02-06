@@ -26,6 +26,7 @@ DESC = 'A simple lightweight nfo-viewer written in C++ with Qt4 Interface'     #
 #include "bp-nfoview.h"
 
 void Ui::Ui_MainWindow::setupUi(){
+  raw = 0;
 	if (this->objectName().isEmpty())
 		this->setObjectName(QString::fromUtf8("MainWindow"));
 	QSettings settings(QSettings::IniFormat, QSettings::UserScope,"brainpower", "bp-nfoview");
@@ -49,6 +50,13 @@ void Ui::Ui_MainWindow::setupUi(){
 	actionDefaultColor = new QAction(this);
 	actionFont = new QAction(this);
 	actionDefaultFont = new QAction(this);
+	actionCodecUTF8 = new QAction(this);
+	actionCodecUTF8->setCheckable(true);
+	actionCodecCP437 = new QAction(this);
+	actionCodecCP437->setCheckable(true);
+	agCodec = new QActionGroup(this);
+	actionCodecUTF8->setActionGroup(agCodec);
+	actionCodecCP437->setActionGroup(agCodec);
 	centralwidget = new QWidget(this);
 	centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
 	textEdit = new QTextEdit(centralwidget);
@@ -77,6 +85,7 @@ void Ui::Ui_MainWindow::setupUi(){
 	menuFile = new QMenu(menubar);
 	menuFile->setObjectName(QString::fromUtf8("menuFile"));
 	menuView = new QMenu(menubar);
+	menuViewCodec = new QMenu(menuView);
 	menuHelp = new QMenu(menubar);
 	menuHelp->setObjectName(QString::fromUtf8("menuHelp"));
 	setMenuBar(menubar);
@@ -103,7 +112,10 @@ void Ui::Ui_MainWindow::setupUi(){
 	menuView->addAction(actionDefaultColor);
 	menuView->addAction(actionFont);
 	menuView->addAction(actionDefaultFont);
+	menuView->addAction(menuViewCodec->menuAction());
 	menuHelp->addAction(actionAbout);
+	menuViewCodec->addAction(actionCodecCP437);
+	menuViewCodec->addAction(actionCodecUTF8);
 	retranslateUi();
 	updateGeometries();
 	connect(actionSB, SIGNAL(toggled(bool)),this, SLOT(SBaction(bool)));
@@ -115,6 +127,8 @@ void Ui::Ui_MainWindow::setupUi(){
 	connect(actionFont, SIGNAL(triggered()),this, SLOT(FontAction()));
 	connect(actionDefaultFont, SIGNAL(triggered()),this, SLOT(DefaultFontAction()));
 	connect(actionSaveImage, SIGNAL(triggered()),this,SLOT(saveImageAction()));
+	connect(actionCodecUTF8, SIGNAL(triggered()), this, SLOT(switchCodecUTF8Action()));
+	connect(actionCodecCP437, SIGNAL(triggered()), this, SLOT(switchCodecCP437Action()));
 	QMetaObject::connectSlotsByName(this);
 } // setupUi
 
@@ -129,6 +143,9 @@ void Ui::Ui_MainWindow::retranslateUi(){
 	actionDefaultColor->setText("Restore default color");
 	actionFont->setText("Select custom Font...");
 	actionDefaultFont->setText("Restore default font");
+	actionCodecCP437->setText("CP 437");
+	actionCodecUTF8->setText("UTF-8");
+	menuViewCodec->setTitle("Encoding");
 	menuFile->setTitle("File");
 	menuView->setTitle("View");
 	menuHelp->setTitle("Help");
@@ -207,21 +224,45 @@ void Ui::Ui_MainWindow::DefaultFontAction(){
 void Ui::Ui_MainWindow::loadFile(QString path){
 	//QSettings settings(QSettings::IniFormat, QSettings::UserScope,"brainpower", "bp-nfoview");
 	QFile nfofile(path);
+	bool noCP437 = false;
+
 	if(nfofile.exists()){
 		nfofile.open(QIODevice::ReadOnly | QIODevice::Text);
 		QString nline;
-		QCodePage437Codec *codec = new QCodePage437Codec();
-		QByteArray line;
-		while(!nfofile.atEnd()){
-			line = nfofile.readLine();
-			nline.append(codec->toUnicode(line));
-		}
-		textEdit->setText(nline);
-		if(sboffset!=0)	statusbar->showMessage(QString("'")+path+QString("' loaded."));
+		if(raw)
+		  delete raw;
+		raw = new QByteArray(nfofile.readAll());
+
+		nfofile.seek(0); // seek back to beginning of file
+
+		QByteArray line = nfofile.readLine();
+
+    // TODO: put a much nicer auto codec detection here!!!
+		if( line[0] == (char)0xEF && line[1] == (char)0xBB && line[2] == (char)0xBF )
+		  noCP437 = true;
+
+
 		nfofile.close();
-		delete codec;
-		codec = 0;
+
+		if(noCP437){
+		  actionCodecUTF8->setChecked(true);
+		  textEdit->setText( QString::fromUtf8( *raw ) );
+    } else {
+		  actionCodecCP437->setChecked( true );
+		  textEdit->setText( QCodePage437Codec().toUnicode( *raw ) );
+    }
+
+		if(sboffset!=0)	statusbar->showMessage(QString("'")+path+QString("' loaded."));
 	}
+}
+
+void Ui::Ui_MainWindow::switchCodecUTF8Action(){
+  if(raw)
+    textEdit->setText( QString::fromUtf8( *raw ));
+}
+void Ui::Ui_MainWindow::switchCodecCP437Action(){
+  if(raw)
+    textEdit->setText( QCodePage437Codec().toUnicode( *raw ) );
 }
 
 void Ui::Ui_MainWindow::saveImageAction(){

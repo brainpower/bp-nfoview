@@ -28,13 +28,14 @@ DESC = 'A simple lightweight nfo-viewer written in C++ with Qt4 Interface'     #
 #define BP_NFOVIEW_H
 
 #ifndef MAIN_VERSION
-#define MAIN_VERSION "0.1.2"
+#define MAIN_VERSION "0.2.0"
 #endif // VERSION
 
 // ## Qt4 includes:
 #include <QtCore/QFile>
 #include <QtCore/QSettings>
 #include <QtGui/QAction>
+#include <QtGui/QActionGroup>
 #include <QtGui/QApplication>
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenu>
@@ -70,13 +71,17 @@ public:
 		QAction *actionDefaultColor;
 		QAction *actionFont;
 		QAction *actionDefaultFont;
+		QAction *actionCodecUTF8, *actionCodecCP437;
+		QActionGroup *agCodec;
 		QWidget *centralwidget;
 		QTextEdit *textEdit;
 		QMenuBar *menubar;
 		QMenu *menuFile;
 		QMenu *menuView;
+		QMenu *menuViewCodec;
 		QMenu *menuHelp;
 		QStatusBar *statusbar;
+		QByteArray *raw;
 		QPalette defaultPalette;
 		QFont defaultFont;
 		QFont cFont;
@@ -97,6 +102,8 @@ public slots:
 		void DefaultColorAction();
 		void FontAction();
 		void DefaultFontAction();
+		void switchCodecUTF8Action();
+		void switchCodecCP437Action();
 		void loadFile(QString);
 		void saveImageAction();
 }; // Ui_MainWindow
