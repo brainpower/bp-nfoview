@@ -1,2 +1,3 @@
 DONE: migrate to CMake - done.
 TODO: Ctrl-F implementation
+TODO: find/implement nicer encoding detection, se comment in Ui_MainWindow::loadFile()
