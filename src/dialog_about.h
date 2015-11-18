@@ -30,15 +30,16 @@ DESC = 'A simple lightweight nfo-viewer written in C++ with Qt4 Interface'     #
 #define DIALOG_ABOUT_VERSION "0.1.0"
 #endif // VERSION
 
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QLabel>
-#include <QtGui/QDialog>
+#include <QDialogButtonBox>
+#include <QLabel>
+#include <QDialog>
 #include "bp-nfoview.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
 
-class Dialog_About: public QDialog{ Q_OBJECT
+class Dialog_About: public QDialog{
+	Q_OBJECT
 public:
 	QDialogButtonBox *buttonBox;
 	QLabel *label;

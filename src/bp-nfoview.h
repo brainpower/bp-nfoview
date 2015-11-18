@@ -32,26 +32,26 @@ DESC = 'A simple lightweight nfo-viewer written in C++ with Qt4 Interface'     #
 #endif // VERSION
 
 // ## Qt4 includes:
-#include <QtCore/QFile>
-#include <QtCore/QSettings>
-#include <QtGui/QAction>
-#include <QtGui/QActionGroup>
-#include <QtGui/QApplication>
-#include <QtGui/QMainWindow>
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
-#include <QtGui/QStatusBar>
-#include <QtGui/QTextEdit>
-#include <QtGui/QWidget>
-#include <QtGui/QKeySequence>
-#include <QtGui/QFileDialog>
-#include <QtGui/QColorDialog>
-#include <QtGui/QFontDialog>
-#include <QtGui/QPainter>
-#include <QtGui/QPen>
-#include <QtGui/QBrush>
-#include <QtGui/QPixmap>
-#include <QtGui/QImage>
+#include <QFile>
+#include <QSettings>
+#include <QAction>
+#include <QActionGroup>
+#include <QApplication>
+#include <QMainWindow>
+#include <QMenu>
+#include <QMenuBar>
+#include <QStatusBar>
+#include <QTextEdit>
+#include <QWidget>
+#include <QKeySequence>
+#include <QFileDialog>
+#include <QColorDialog>
+#include <QFontDialog>
+#include <QPainter>
+#include <QPen>
+#include <QBrush>
+#include <QPixmap>
+#include <QImage>
 // ## own headers:
 #include "qcodepage437codec.h"
 #include "dialog_about.h"
@@ -59,7 +59,8 @@ DESC = 'A simple lightweight nfo-viewer written in C++ with Qt4 Interface'     #
 QT_BEGIN_NAMESPACE
 namespace Ui {
 
-class Ui_MainWindow: public QMainWindow{	Q_OBJECT
+class Ui_MainWindow: public QMainWindow{
+	Q_OBJECT
 public:
 		// QObjects
 		QAction *actionOpen;

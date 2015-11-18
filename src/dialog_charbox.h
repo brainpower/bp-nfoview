@@ -36,11 +36,11 @@ DESC = 'A simple lightweight nfo-viewer written in C++ with Qt4 Interface'     #
 QT_BEGIN_NAMESPACE
 namespace Ui {
 
-class Dialog_About: public QDialog{
+class Dialog_Charbox: public QDialog{
 	Q_OBJECT
 public:
 	//QTable
-	Dialog_About();
+	Dialog_Charbox();
 
 }; // Dialog_About
 } // namespace Ui

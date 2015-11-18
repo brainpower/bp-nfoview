@@ -2,12 +2,43 @@ project(bp-nfoview)
 
 cmake_minimum_required(VERSION 2.8)
 
-find_package(Qt4 REQUIRED)
-include(${QT_USE_FILE})
-
+option(USE_QT5 "experimental !!!" OFF)
 option(WIN32 "Build for WIN32 environment..." OFF)
-ADD_DEFINITIONS(-O2)
 
+if(USE_QT5)
+	find_package(Qt5Core REQUIRED)
+	find_package(Qt5Widgets REQUIRED)
+
+	add_definitions(-DBP_QT5)
+else()
+	find_package(Qt4 4.7)
+	if(NOT ${QT_FOUND})
+		message(STATUS "Recheck for Qt4 now with -qt4 postfix added...")
+
+		set(QT_QMAKE_EXECUTABLE qmake-qt4 )
+		set(QT_MOC_EXECUTABLE   moc-qt4 )
+		set(QT_RCC_EXECUTABLE   rcc-qt4 )
+		set(QT_UIC_EXECUTABLE   uic-qt4 )
+
+		find_package(Qt4 4.7 REQUIRED)
+	endif()
+endif()
+
+if(NOT USE_QT5)
+	include(${QT_USE_FILE})
+
+	link_directories( ${QT_LIBRARY_DIR})
+endif()
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+
+# compiler optmization level
+ADD_DEFINITIONS( -O3 )
+
+# extra stuff needed with windows compilers
 IF(WIN32)
 	ADD_DEFINITIONS(-DWIN32 -DUNICODE -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT)
 	SET(GUI_TYPE WIN32)

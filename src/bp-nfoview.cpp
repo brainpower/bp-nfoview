@@ -241,7 +241,6 @@ void Ui::Ui_MainWindow::loadFile(QString path){
 		if( line[0] == (char)0xEF && line[1] == (char)0xBB && line[2] == (char)0xBF )
 		  noCP437 = true;
 
-
 		nfofile.close();
 
 		if(noCP437){
