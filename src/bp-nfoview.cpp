@@ -59,7 +59,7 @@ void Ui::Ui_MainWindow::setupUi(){
 	actionCodecCP437->setActionGroup(agCodec);
 	centralwidget = new QWidget(this);
 	centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
-	textEdit = new QTextEdit(centralwidget);
+	textEdit = new QTextBrowser(centralwidget);
 	textEdit->setObjectName(QString::fromUtf8("textEdit"));
 	textEdit->setGeometry(QRect(0, 0, 671, 641));
 	//sizePolicy.setHeightForWidth(textEdit->sizePolicy().hasHeightForWidth());

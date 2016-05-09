@@ -2,7 +2,7 @@ project(bp-nfoview)
 
 cmake_minimum_required(VERSION 2.8)
 
-option(USE_QT5 "experimental !!!" OFF)
+option(USE_QT5 "Build using Qt5" ON)
 option(WIN32 "Build for WIN32 environment..." OFF)
 
 if(USE_QT5)

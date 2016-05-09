@@ -42,6 +42,7 @@ DESC = 'A simple lightweight nfo-viewer written in C++ with Qt4 Interface'     #
 #include <QMenuBar>
 #include <QStatusBar>
 #include <QTextEdit>
+#include <QTextBrowser>
 #include <QWidget>
 #include <QKeySequence>
 #include <QFileDialog>
@@ -75,7 +76,7 @@ public:
 		QAction *actionCodecUTF8, *actionCodecCP437;
 		QActionGroup *agCodec;
 		QWidget *centralwidget;
-		QTextEdit *textEdit;
+		QTextBrowser *textEdit;
 		QMenuBar *menubar;
 		QMenu *menuFile;
 		QMenu *menuView;
