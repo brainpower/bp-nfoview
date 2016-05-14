@@ -24,41 +24,84 @@
 #                                                                              #
 #############################################################################**/
 
+#ifndef BP_NFOVIEW_BPNVMAINWINDOW_HPP
+#define BP_NFOVIEW_BPNVMAINWINDOW_HPP
 
-#include <QCommandLineParser>
-#include <QApplication>
+#include <memory>
 
-#include "bp-nfoview.h"
-#include "BPNVMainWindow.hpp"
+#include <QMainWindow>
+#include <QSize>
+
+class QTextBrowser;
+class QSettings;
+class QSize;
+class QAction;
+class QActionGroup;
+class QMenu;
+class QMenuBar;
+class QStatusBar;
+
+class BPNVMainWindow : public QMainWindow {
+	Q_OBJECT
+
+public:
+	BPNVMainWindow();
+	explicit BPNVMainWindow(QStringList list);
+	virtual ~BPNVMainWindow();
 
 
-int main( int argc, char* argv[] ){
-	QApplication app( argc, argv );
 
-	app.setApplicationName("bp-nfoview");
-	app.setApplicationDisplayName("brainpower's NfoViewer");
-	app.setOrganizationName("brainpower");
-	app.setOrganizationDomain("de.brainpower");
-	app.setApplicationVersion(MAIN_VERSION);
+	bool loadFile(QString file);
 
-	QApplication::setWindowIcon(QIcon(":/img/logo.png"));
+public slots:
+	void onActionStatusBar(bool);
+	void onActionOpen();
+	void onActionSaveImage();
+	void onActionColor();
+	void onActionDefaultColor();
+	void onActionFont();
+	void onActionDefaultFont();
+	void onActionSwitchToUTF8();
+	void onActionSwitchToCP437();
+	void onActionAbout();
 
-	QCommandLineParser parser;
-	parser.setApplicationDescription("A very simple viewer for .nfo files.");
-	parser.addVersionOption();
-	parser.addHelpOption();
+private:
+	QString currentFile;
+	std::shared_ptr<QByteArray> rawFileData;
 
-	parser.addPositionalArgument(QStringLiteral("file"), QStringLiteral("File to open."), QStringLiteral("[file]"));
+	void setupUi();
 
-	parser.process(app);
+	QTextBrowser *textBrowser;
+	QSettings *settings;
 
-	BPNVMainWindow *gui;
-	if(parser.positionalArguments().isEmpty()){
-		gui = new BPNVMainWindow;
-	} else {
-		gui = new BPNVMainWindow(parser.positionalArguments());
-	}
+	QSize sizeHint() const;
 
-	gui->show();
-	return app.exec();
-}
+	QAction *actionOpen,
+			    *actionSaveImage,
+	        *actionQuit,
+	        *actionAbout,
+	        *actionStatusBar,
+	        *actionColor, *actionDefaultColor,
+	        *actionFont,  *actionDefaultFont,
+	        *actionCodecUTF8, *actionCodecCP437;
+	QActionGroup *agCodec;
+
+	QMenuBar *menubar;
+	QMenu *menuFile,
+	      *menuView,
+	      *menuViewCodec,
+	      *menuHelp;
+	QStatusBar *statusbar;
+
+	QFont defaultFont;
+	QFont currentFont;
+	QPalette defaultPalette;
+	QPalette currentPalette;
+
+
+	void saveAsImage(QString qString);
+
+	void updateTextBrowser(bool isCP437);
+};
+
+#endif //BP_NFOVIEW_BPNVMAINWINDOW_HPP

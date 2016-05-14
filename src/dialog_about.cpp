@@ -23,7 +23,10 @@ DESC = 'A simple lightweight nfo-viewer written in C++ with Qt4 Interface'     #
 # Copyright (c) 2010-2013  brainpower@gulli.com                                #
 #                                                                              #
 #############################################################################**/
+
 #include "dialog_about.h"
+
+#include <QIcon>
 
 Ui::Dialog_About::Dialog_About(QWidget *parent): QDialog(parent) {
 	setObjectName("Dialog_About");
@@ -55,16 +58,9 @@ Ui::Dialog_About::Dialog_About(QWidget *parent): QDialog(parent) {
 
 	QString aboutText("<span style=\"font-size:16pt;\"><b>bp-nfoview ");
 	aboutText += MAIN_VERSION;
-	aboutText += "</b></span><br>A simple lightweight nfo-viewer written in C++ using Qt4 for its interface<br>";
+	aboutText += "</b></span><br>A simple lightweight nfo-viewer written in C++ using Qt for its interface<br>";
 
-	aboutText += "<br>\nits also using:\n";
-	aboutText += "<br>Codepage437Codec ";
-	aboutText += QCODEPAGE437CODEC_VERSION;
-
-	aboutText += "<br>AboutDialog ";
-	aboutText += DIALOG_ABOUT_VERSION;
-
-	aboutText += "<br><br>Copyright (c) 2010-2013 &lt;brainpower@gulli.com&gt; <br>licensed under GPL-3<br> See <a href=\"http://www.gnu.org/licenses/gpl.html\">http://www.gnu.org/licenses/</a> for more info";
+	aboutText += "<br><br>Copyright (c) 2010-2016 &lt;brainpower@mailbox.org&gt; <br>licensed under GPLv3<br> See <a href=\"http://www.gnu.org/licenses/gpl.html\">http://www.gnu.org/licenses/</a> for more info";
 	label->setText(aboutText);
 
 	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
