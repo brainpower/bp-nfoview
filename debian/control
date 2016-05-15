@@ -1,8 +1,8 @@
 Source: bp-nfoview
 Section: utils
 Priority: extra
-Maintainer: brainpower <brainpower@gulli.com>
-Build-Depends: debhelper (>= 8.0.0), cmake, qt4-dev-tools, libqt4-dev
+Maintainer: brainpower <brainpower@mailbox.org>
+Build-Depends: debhelper (>= 8.0.0), cmake, qtbase5-dev qt5-qmake
 Standards-Version: 3.9.2
 Homepage:
 Vcs-Git: git://github.com/brainpower/bp-nfoview.git

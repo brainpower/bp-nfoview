@@ -1,6 +1,6 @@
 
-set(HDRS bp-nfoview.h dialog_about.h qcodepage437codec.h BPNVMainWindow.hpp AboutDialog.hpp)
-set(SRCS bp-nfoview.cpp dialog_about.cpp qcodepage437codec.cpp bp-nfoview.qrc BPNVMainWindow.cpp AboutDialog.cpp)
+set(HDRS bp-nfoview.h qcodepage437codec.h BPNVMainWindow.hpp AboutDialog.hpp)
+set(SRCS bp-nfoview.cpp qcodepage437codec.cpp bp-nfoview.qrc BPNVMainWindow.cpp AboutDialog.cpp)
 
 if(NOT USE_QT5)
 	include(${QT_USE_FILE})

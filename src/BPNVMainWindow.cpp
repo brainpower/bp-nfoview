@@ -48,6 +48,7 @@
 #include <QFileDialog>
 #include <QColorDialog>
 #include <QFontDialog>
+#include <QPainter>
 
 BPNVMainWindow::BPNVMainWindow() {
 	setupUi();
@@ -132,18 +133,17 @@ void BPNVMainWindow::updateTextBrowser(bool isCP437){
 }
 
 void BPNVMainWindow::saveAsImage(QString filepath) {
-	/*
-
-	QString str = textEdit->toPlainText();
-	QFontMetrics fm(cFont);
+	QString str = textBrowser->toPlainText();
+	QFontMetrics fm(currentFont);
 	QSize textSize = fm.size(0,str);
 	QImage pixmap(textSize, QImage::Format_RGB32);
-	QPalette pal(textEdit->palette());
+	QPalette pal(textBrowser->palette());
 	QBrush bpen(pal.color(QPalette::Base));
 	QPen fpen(pal.color(QPalette::Text));
 	QPainter *pa=new QPainter(&pixmap);
+
 	//pa->begin(&pixmap);
-	pa->setFont(cFont);
+	pa->setFont(currentFont);
 	pa->setBrush(bpen);
 	pa->drawRect(0,0,textSize.width(),textSize.height());
 	pa->setPen(fpen);
@@ -152,12 +152,8 @@ void BPNVMainWindow::saveAsImage(QString filepath) {
 	pa->drawText(0,fm.height(),textSize.width(),textSize.height(), Qt::AlignLeft | Qt::TextIncludeTrailingSpaces,str);
 	//pa->drawLine(0,140,320,140);
 	pa->end();
-	pixmap.save(path);
-	if(pa) {
-		delete pa; pa = 0;
-	}
-
-	*/
+	pixmap.save(filepath);
+	delete pa; pa = 0;
 }
 
 
@@ -396,6 +392,7 @@ void BPNVMainWindow::onActionFont() {
 		textBrowser->setFont(font);
 		textBrowser->repaint();
 
+		currentFont = font;
 		settings->setValue("GUI/font", font);
 	}
 }

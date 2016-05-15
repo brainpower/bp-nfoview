@@ -3,11 +3,11 @@ Upstream-Name: bp-nfoview
 Source:
 
 Files: *
-Copyright: 2012 brainpower <brainpower@gulli.com>
+Copyright: 2010-2016 brainpower <brainpower@mailbox.org>
 License: GPL-2.0+
 
 Files: debian/*
-Copyright: 2012 brainpower <brainpower@gulli.com>
+Copyright: 2010-2016 brainpower <brainpower@mailbox.org>
 License: GPL-2.0+
 
 License: GPL-2.0+

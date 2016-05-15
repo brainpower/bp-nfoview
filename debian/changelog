@@ -1,3 +1,9 @@
+bp-nfoview (0.2.0-1~xenial1) xenial; urgency=low
+
+  * saucy build
+
+ -- brainpower <brainpower@gulli.com>  Sun, 15 May 2016 02:29:00 +0200
+
 bp-nfoview (0.1.2-1~saucy1) saucy; urgency=low
 
   * saucy build

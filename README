@@ -1,4 +1,4 @@
-To compile this app, make sure you installed the Qt4 SDK,
+To compile this app, make sure you installed the Qt SDK,
 then just run
 
 	$ cd bp-nfoview
