@@ -9,6 +9,6 @@ before_install: sudo apt-get install -qq libqtcore4 qt4-qmake # qtbase5-dev qt5-
 before_script:
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake .. -DUSE_QT5=OFF
 
 script: make
