@@ -202,6 +202,15 @@ void BPNVMainWindow::setupUi() {
 	statusbar = new QStatusBar(this);
 
 	// Actions
+	actionOpen->setIcon(QIcon::fromTheme("document-open"));
+	actionQuit->setIcon(QIcon::fromTheme("application-exit"));
+	actionSaveImage->setIcon(QIcon::fromTheme("document-save-as"));
+	actionFont->setIcon(QIcon::fromTheme("fonts-package"));
+	actionDefaultFont->setIcon(QIcon::fromTheme("fonts-package"));
+	actionColor->setIcon(QIcon::fromTheme("fill-color"));
+	actionDefaultColor->setIcon(QIcon::fromTheme("fill-color"));
+	actionAbout->setIcon(QIcon::fromTheme("help-about"));
+
 	actionOpen->setShortcut(QKeySequence(QKeySequence::Open));
 	actionQuit->setShortcut(QKeySequence(QKeySequence::Quit));
 
