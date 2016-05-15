@@ -1,6 +1,6 @@
 /**#############################################################################
 #                                                                              #
-# PROJECT = "bp-nfoview"                                                          #
+# PROJECT = "bp-nfoview"                                                       #
 # AUTHOR = "brainpower@mailbox.org"                                            #
 # VERSION = "0.2.0"                                                            #
 # LICENCE = "GPLv3"                                                            #
@@ -49,11 +49,10 @@ public:
 	explicit BPNVMainWindow(QStringList list);
 	virtual ~BPNVMainWindow();
 
-
-
-	bool loadFile(QString file);
-
 public slots:
+	bool loadFile(QString file);
+	void saveAsImage(QString qString);
+
 	void onActionStatusBar(bool);
 	void onActionOpen();
 	void onActionSaveImage();
@@ -65,6 +64,8 @@ public slots:
 	void onActionSwitchToCP437();
 	void onActionAbout();
 
+	QSize sizeHint() const override;
+
 private:
 	QString currentFile;
 	std::shared_ptr<QByteArray> rawFileData;
@@ -74,7 +75,7 @@ private:
 	QTextBrowser *textBrowser;
 	QSettings *settings;
 
-	QSize sizeHint() const;
+
 
 	QAction *actionOpen,
 			    *actionSaveImage,
@@ -99,8 +100,9 @@ private:
 	QPalette currentPalette;
 
 
-	void saveAsImage(QString qString);
 
+
+private slots:
 	void updateTextBrowser(bool isCP437);
 };
 

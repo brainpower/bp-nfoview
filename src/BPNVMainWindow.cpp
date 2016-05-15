@@ -1,6 +1,6 @@
 /**#############################################################################
 #                                                                              #
-# PROJECT = "bp-nfoview"                                                          #
+# PROJECT = "bp-nfoview"                                                       #
 # AUTHOR = "brainpower@mailbox.org"                                            #
 # VERSION = "0.2.0"                                                            #
 # LICENCE = "GPLv3"                                                            #
@@ -26,6 +26,7 @@
 
 #include "BPNVMainWindow.hpp"
 #include "qcodepage437codec.h"
+#include "AboutDialog.hpp"
 
 #ifdef BP_QT5
 #include <QRegularExpression>
@@ -44,9 +45,9 @@
 #include <QMenuBar>
 #include <QStatusBar>
 #include <QCoreApplication>
-#include <QtWidgets/QFileDialog>
-#include <QtWidgets/QColorDialog>
-#include <QtWidgets/QFontDialog>
+#include <QFileDialog>
+#include <QColorDialog>
+#include <QFontDialog>
 
 BPNVMainWindow::BPNVMainWindow() {
 	setupUi();
@@ -420,8 +421,8 @@ void BPNVMainWindow::onActionSwitchToCP437() {
 
 
 void BPNVMainWindow::onActionAbout() {
-	//AboutDialog ad(this);
-	//ad.exec();
+	AboutDialog ad(this);
+	ad.exec();
 }
 
 

@@ -1,6 +1,6 @@
 /**#############################################################################
 #                                                                              #
-# PROJECT = "bp-nfoview"                                                          #
+# PROJECT = "bp-nfoview"                                                       #
 # AUTHOR = "brainpower@mailbox.org"                                            #
 # VERSION = "0.2.0"                                                            #
 # LICENCE = "GPLv3"                                                            #

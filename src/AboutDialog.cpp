@@ -1,10 +1,10 @@
 /**#############################################################################
 #                                                                              #
-NAME = "bp-nfoview"                                                            #
-AUTHOR = "brainpower@gulli.com"                                                #
-VERSION = "0.1.2"                                                              #
-LICENCE = "GPL-3"                                                              #
-DESC = 'A simple lightweight nfo-viewer written in C++ with Qt4 Interface'     #
+# PROJECT = "bp-nfoview"                                                       #
+# AUTHOR = "brainpower@mailbox.org"                                            #
+# VERSION = "0.2.0"                                                            #
+# LICENCE = "GPLv3"                                                            #
+# DESC = 'A simple lightweight nfo-viewer written in C++ with Qt Interface'    #
 #                                                                              #
 # This program comes with ABSOLUTELY NO WARRANTY                               #
 #                                                                              #
@@ -20,50 +20,59 @@ DESC = 'A simple lightweight nfo-viewer written in C++ with Qt4 Interface'     #
 # You should have received a copy of the GNU General Public License along with #
 # this program; if not, see <http://www.gnu.org/licenses/>.                    #
 #                                                                              #
-# Copyright (c) 2010-2013  brainpower@gulli.com                                #
+# Copyright (c) 2010-2016  brainpower <brainpower@mailbox.org>                 #
 #                                                                              #
 #############################################################################**/
 
-#include "dialog_about.h"
+#include <QLabel>
+#include <QDialogButtonBox>
+#include <QString>
+#include <QVBoxLayout>
 
-#include <QIcon>
+#include "AboutDialog.hpp"
+#include "bp-nfoview.h"
 
-Ui::Dialog_About::Dialog_About(QWidget *parent): QDialog(parent) {
-	setObjectName("Dialog_About");
-	setWindowTitle("About");
-	resize(380, 312);
-	setMaximumSize(380, 312);
-	setMinimumSize(380, 312);
-	QIcon aboutIcon(":/img/bp-nfoview.png");
-	setWindowIcon(aboutIcon);
+AboutDialog::AboutDialog(QWidget *parent)
+		: QDialog(parent) {
+	setWindowTitle(QStringLiteral("About"));
 
-	ilabel = new QLabel(this);
-	ilabel->setGeometry(5,5,370,64);
-	ilabel->setPixmap(QPixmap(":/img/bp-nfoview.png").scaled(64,64,Qt::KeepAspectRatio));
-	ilabel->setAlignment(Qt::AlignCenter);
-
+	layout    = new QVBoxLayout(this);
+	ilabel    = new QLabel(this);
+	label     = new QLabel(this);
 	buttonBox = new QDialogButtonBox(this);
-	buttonBox->setGeometry(QRect(5, 280, 370, 32));
-	buttonBox->setOrientation(Qt::Horizontal);
-	buttonBox->setStandardButtons(QDialogButtonBox::Close);
-	buttonBox->setCenterButtons(true);
-	buttonBox->setObjectName("buttonBox");
 
-	label = new QLabel(this);
-	label->setGeometry(QRect(5, 64, 370, 220));
+	layout->addWidget(ilabel);
+	layout->addWidget(label, 1);
+	layout->addWidget(buttonBox);
+
 	label->setAlignment(Qt::AlignCenter);
 	label->setWordWrap(true);
 	label->setOpenExternalLinks(true);
-	label->setObjectName("label");
 
-	QString aboutText("<span style=\"font-size:16pt;\"><b>bp-nfoview ");
-	aboutText += MAIN_VERSION;
-	aboutText += "</b></span><br>A simple lightweight nfo-viewer written in C++ using Qt for its interface<br>";
+	ilabel->setPixmap(QPixmap(":/img/bp-nfoview.png").scaled(64,64,Qt::KeepAspectRatio));
+	ilabel->setAlignment(Qt::AlignCenter);
 
-	aboutText += "<br><br>Copyright (c) 2010-2016 &lt;brainpower@mailbox.org&gt; <br>licensed under GPLv3<br> See <a href=\"http://www.gnu.org/licenses/gpl.html\">http://www.gnu.org/licenses/</a> for more info";
-	label->setText(aboutText);
+	buttonBox->setOrientation(Qt::Horizontal);
+	buttonBox->setStandardButtons(QDialogButtonBox::Close);
+	buttonBox->setCenterButtons(true);
+
+	label->setText(QStringLiteral(
+     "<br>"
+		 "<span style=\"font-size:16pt;\"><b>bp-nfoview " MAIN_VERSION "</b></span><br>"
+     "A simple lightweight nfo-viewer written in C++ using Qt for its interface<br>"
+     "<br>"
+     "<br>"
+     "Copyright (c) 2010-2016 &lt;brainpower@mailbox.org&gt; <br>"
+     "licensed under GPLv3<br>"
+     "See <a href=\"http://www.gnu.org/licenses/gpl.html\">http://www.gnu.org/licenses/</a> for more info.<br>"
+	));
 
 	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
 	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-	QMetaObject::connectSlotsByName(this);
+
 }
+
+QSize AboutDialog::sizeHint() const {
+	return QSize(400,200).expandedTo(minimumSizeHint());
+}
+

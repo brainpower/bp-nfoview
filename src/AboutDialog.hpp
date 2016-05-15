@@ -1,10 +1,10 @@
 /**#############################################################################
 #                                                                              #
-NAME = "bp-nfoview"                                                            #
-AUTHOR = "brainpower@gulli.com"                                                #
-VERSION = "0.1.2"                                                              #
-LICENCE = "GPL-3"                                                              #
-DESC = 'A simple lightweight nfo-viewer written in C++ with Qt4 Interface'     #
+# PROJECT = "bp-nfoview"                                                       #
+# AUTHOR = "brainpower@mailbox.org"                                            #
+# VERSION = "0.2.0"                                                            #
+# LICENCE = "GPLv3"                                                            #
+# DESC = 'A simple lightweight nfo-viewer written in C++ with Qt Interface'    #
 #                                                                              #
 # This program comes with ABSOLUTELY NO WARRANTY                               #
 #                                                                              #
@@ -20,34 +20,36 @@ DESC = 'A simple lightweight nfo-viewer written in C++ with Qt4 Interface'     #
 # You should have received a copy of the GNU General Public License along with #
 # this program; if not, see <http://www.gnu.org/licenses/>.                    #
 #                                                                              #
-# Copyright (c) 2010-2013 brainpower@gulli.com                                 #
+# Copyright (c) 2010-2016  brainpower <brainpower@mailbox.org>                 #
 #                                                                              #
 #############################################################################**/
-#ifndef BP_NFOVIEW_DIALOG_ABOUT_H
-#define BP_NFOVIEW_DIALOG_ABOUT_H
 
-#ifndef DIALOG_ABOUT_VERSION
-#define DIALOG_ABOUT_VERSION "0.1.0"
-#endif // VERSION
+#ifndef BP_NFOVIEW_ABOUTDIALOG_HPP
+#define BP_NFOVIEW_ABOUTDIALOG_HPP
 
-#include <QDialogButtonBox>
-#include <QLabel>
 #include <QDialog>
-#include "bp-nfoview.h"
 
-QT_BEGIN_NAMESPACE
-namespace Ui {
+class QLabel;
+class QDialogButtonBox;
+class QVBoxLayout;
 
-class Dialog_About: public QDialog{
+
+class AboutDialog : public QDialog {
 	Q_OBJECT
 public:
+
+	explicit AboutDialog(QWidget *parent = nullptr);
+
+public slots:
+
+	QSize sizeHint() const override;
+
+private:
 	QDialogButtonBox *buttonBox;
 	QLabel *label;
 	QLabel *ilabel;
-	Dialog_About(QWidget *parent =0);
+	QVBoxLayout *layout;
+};
 
-}; // Dialog_About
-} // namespace Ui
-QT_END_NAMESPACE
-#endif // BP_NFOVIEW_DIALOG_ABOUT_H
 
+#endif //BP_NFOVIEW_ABOUTDIALOG_HPP
