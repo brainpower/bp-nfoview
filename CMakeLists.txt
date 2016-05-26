@@ -36,7 +36,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 
 # compiler optmization level
-ADD_DEFINITIONS( -O3 )
+ADD_DEFINITIONS( -O3 -std=c++11 )
 
 # extra stuff needed with windows compilers
 IF(WIN32)
