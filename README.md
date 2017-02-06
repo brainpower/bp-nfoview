@@ -13,6 +13,8 @@ You can use your favourite AUR-Helper to install it. For example:
 
     pacaur -S bp-nfoview
 
+You can also use the PKGBUILD in arch/ to create a package from git master.
+
 ### Others
 
 ... will have to compile from source.

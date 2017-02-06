@@ -1,7 +1,7 @@
 # Maintainer: oi_wtf <brainpower at mailbox dot org>
 
-pkgname="bp-nfoview"
-pkgver=0.1.2
+pkgname="bp-nfoview-git"
+pkgver=0.2.1.r4.g5e080b2
 pkgrel=1
 pkgdesc="A Simple NFO-Viewer by brainpower"
 arch=('i686' 'x86_64')
@@ -9,11 +9,18 @@ url="https://github.com/brainpower/bp-nfoview"
 license=('GPL')
 depends=('qt5-base')
 makedepends=('cmake' 'git')
-source=("https://github.com/brainpower/bp-nfoview/archive/v${pkgver}.tar.gz")
-sha256sums=('bbf8baca55d66938e0d11a68157e10f6804651e21002b3d22de7f569d7f425df')
+conflicts=('bp-nfoview')
+provides=('bp-nfoview')
+source=("${pkgname}::git://github.com/brainpower/bp-nfoview.git")
+sha256sums=('SKIP')
+
+pkgver(){
+	cd "$srcdir/$pkgname"
+	git describe --long --tags | sed -E 's/([^-]*-g)/r\1/;s/-/./g;s/^v//'
+}
 
 build(){
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${srcdir}/${pkgname}"
 
   mkdir -p build/
   cd build/
@@ -26,6 +33,6 @@ build(){
 }
 
 package(){
-  cd "${srcdir}/${pkgname}-${pkgver}/build/"
-	make DESTDIR="${pkgdir}" install
+  cd "${srcdir}/${pkgname}/build"
+	make install DESTDIR="${pkgdir}"
 }
