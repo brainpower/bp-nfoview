@@ -1,14 +1,21 @@
+sudo: required
+
+arch:
+  packages:
+    - cmake
+    - qt5-base
+
+  script:
+    - mkdir build
+    - cd build
+    - cmake .. -DUSE_QT5=ON
+    - make
+
 language: cpp
 
 compiler:
   - gcc
   - clang
 
-before_install: sudo apt-get install -qq libqtcore4 qt4-qmake # qtbase5-dev qt5-qmake
-
-before_script:
-  - mkdir build
-  - cd build
-  - cmake .. -DUSE_QT5=OFF
-
-script: make
+script:
+  - "curl -s https://raw.githubusercontent.com/mikkeloscar/arch-travis/master/arch-travis.sh | bash"
