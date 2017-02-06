@@ -6,9 +6,7 @@ arch:
     - qt5-base
 
   script:
-    - mkdir build
-    - cd build
-    - cmake .. -DUSE_QT5=ON
+    - cmake . -DUSE_QT5=ON
     - make
 
 language: cpp
