@@ -12,5 +12,5 @@ Terminal=false
 Type=Application
 Version=1.0
 MimeType=text/x-nfo;
-Categories=Application;
+Categories=Utility;
 StartupNotify=true
