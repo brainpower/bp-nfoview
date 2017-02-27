@@ -1,3 +1,9 @@
+bp-nfoview (0.2.2-1) stable; urgency=low
+
+  * new version 0.2.2
+
+ -- brainpower <brainpower@mailbox.org>  Mon, 27 Feb 2017 18:31:00 +0100
+
 bp-nfoview (0.2.0-1~xenial1) xenial; urgency=low
 
   * saucy build
@@ -8,13 +14,13 @@ bp-nfoview (0.1.2-1~saucy1) saucy; urgency=low
 
   * saucy build
 
- -- brainpower <brainpower@gulli.com>  Wed, 13 Nov 2013 19:29:00 +0100  
+ -- brainpower <brainpower@gulli.com>  Wed, 13 Nov 2013 19:29:00 +0100
 
 bp-nfoview (0.1.1-1~saucy1) saucy; urgency=low
 
   * saucy build
 
- -- brainpower <brainpower@gulli.com>  Tue, 13 Aug 2013 20:25:55 +0200 
+ -- brainpower <brainpower@gulli.com>  Tue, 13 Aug 2013 20:25:55 +0200
 
 bp-nfoview (0.1.1-1~raring1) raring; urgency=low
 
