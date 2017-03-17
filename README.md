@@ -15,6 +15,20 @@ You can use your favourite AUR-Helper to install it. For example:
 
 You can also use the PKGBUILD in arch/ to create a package from git master.
 
+### Gentoo
+
+You may use the ebuild at [1] as an example to create a `bp-nfoview-2.0.ebuild`
+which can be used for installing bp-nfoview by creating an local overlay.
+See [2] on how to do that.
+
+After that you can use emerge to install:
+
+		emerge --sync
+		emerge --ask --oneshot app-text/bp-nfoview
+
+[1]: https://github.com/fhede/Gentoo-misc/tree/master/ebuilds/bp-nfoview-qt5
+[2]: https://wiki.gentoo.org/wiki/Custom_repository
+
 ### Others
 
 ... will have to compile from source.
