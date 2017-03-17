@@ -1,26 +1,24 @@
 /**#############################################################################
 #                                                                              #
-NAME = "bp-nfoview"                                                            #
-AUTHOR = "brainpower@gulli.com"                                                #
-VERSION = "0.1.2"                                                              #
-LICENCE = "GPL-3"                                                              #
-DESC = 'A simple lightweight nfo-viewer written in C++ with Qt4 Interface'     #
+# PROJECT = "bp-nfoview"                                                       #
+# LICENCE = "GPL"                                                              #
 #                                                                              #
-# This program comes with ABSOLUTELY NO WARRANTY                               #
+# Copyright (c) 2010-2013  brainpower <brainpower@mailbox.org>                 #
 #                                                                              #
-# This program is free software; you can redistribute it and/or modify it      #
-# under the terms of the GNU General Public License as published by the        #
-# Free Software Foundation; either version 2 of the License, or (at your       #
-# option) any later version.                                                   #
+# This file is part of bp-nfoview.                                             #
 #                                                                              #
-# This program is distributed in the hope that it will be useful, but          #
-# WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY   #
-# or FITNESS FOR A PARTICULAR PURPOSE.                                         #
+# bp-nfoview is free software: you can redistribute it and/or modify           #
+# it under the terms of the GNU General Public License as published by         #
+# the Free Software Foundation, either version 3 of the License, or            #
+# (at your option) any later version.                                          #
+#                                                                              #
+# bp-nfoview is distributed in the hope that it will be useful,                #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of               #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                         #
 # See the GNU General Public License for more details.                         #
-# You should have received a copy of the GNU General Public License along with #
-# this program; if not, see <http://www.gnu.org/licenses/>.                    #
 #                                                                              #
-# Copyright (c) 2010-2013  brainpower@gulli.com                                #
+# You should have received a copy of the GNU General Public License            #
+# along with bp-nfoview.  If not, see <http://www.gnu.org/licenses/>.          #
 #                                                                              #
 #############################################################################**/
 #ifndef BP_NFOVIEW_DIALOG_CHARBOX_H

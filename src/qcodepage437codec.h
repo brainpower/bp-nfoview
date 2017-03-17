@@ -1,26 +1,24 @@
 /**#############################################################################
 #                                                                              #
 # PROJECT = "bp-nfoview"                                                       #
-# AUTHOR = "brainpower@mailbox.org"                                            #
-# VERSION = "0.2.0"                                                            #
-# LICENCE = "GPLv3"                                                            #
-# DESC = 'A simple lightweight nfo-viewer written in C++ with Qt Interface'    #
-#                                                                              #
-# This program comes with ABSOLUTELY NO WARRANTY                               #
-#                                                                              #
-# This program is free software; you can redistribute it and/or modify it      #
-# under the terms of the GNU General Public License as published by the        #
-# Free Software Foundation; either version 2 of the License, or (at your       #
-# option) any later version.                                                   #
-#                                                                              #
-# This program is distributed in the hope that it will be useful, but          #
-# WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY   #
-# or FITNESS FOR A PARTICULAR PURPOSE.                                         #
-# See the GNU General Public License for more details.                         #
-# You should have received a copy of the GNU General Public License along with #
-# this program; if not, see <http://www.gnu.org/licenses/>.                    #
+# LICENCE = "GPL"                                                              #
 #                                                                              #
 # Copyright (c) 2010-2016  brainpower <brainpower@mailbox.org>                 #
+#                                                                              #
+# This file is part of bp-nfoview.                                             #
+#                                                                              #
+# bp-nfoview is free software: you can redistribute it and/or modify           #
+# it under the terms of the GNU General Public License as published by         #
+# the Free Software Foundation, either version 2 of the License, or            #
+# (at your option) any later version.                                          #
+#                                                                              #
+# bp-nfoview is distributed in the hope that it will be useful,                #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of               #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                         #
+# See the GNU General Public License for more details.                         #
+#                                                                              #
+# You should have received a copy of the GNU General Public License            #
+# along with bp-nfoview.  If not, see <http://www.gnu.org/licenses/>.          #
 #                                                                              #
 #############################################################################**/
 /* This Code may resemble some other code,
