@@ -1,6 +1,6 @@
 project(bp-nfoview)
 
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
 option(USE_QT5 "Build using Qt5" ON)
 option(WIN32 "Build for WIN32 environment..." OFF)
@@ -10,6 +10,7 @@ if(USE_QT5)
 	find_package(Qt5Widgets REQUIRED)
 
 	add_definitions(-DBP_QT5)
+	message(STATUS "Found Qt5.")
 else()
 	find_package(Qt4 4.7)
 	if(NOT ${QT_FOUND})
@@ -22,6 +23,7 @@ else()
 
 		find_package(Qt4 4.7 REQUIRED)
 	endif()
+	message(STATUS "Found Qt4.")
 endif()
 
 if(NOT USE_QT5)
@@ -33,10 +35,10 @@ endif()
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
+set(CMAKE_CXX_STANDARD 14)
 
 # compiler optmization level
-ADD_DEFINITIONS( -O3 -std=c++11 )
+ADD_DEFINITIONS( -O3 )
 
 # extra stuff needed with windows compilers
 IF(WIN32)

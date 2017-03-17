@@ -8,6 +8,8 @@ endif()
 
 ADD_EXECUTABLE(bp-nfoview ${HDRS} ${SRCS})
 
+target_compile_features(bp-nfoview PUBLIC cxx_auto_type cxx_nullptr ) # cxx_memory_shared_ptr)
+
 IF(WIN32)
 	SET_TARGET_PROPERTIES(bp-nfoview PROPERTIES LINK_FLAGS "-Wl,-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -Wl,-s -mthreads -Wl,-subsystem,windows -static")
 	SET_TARGET_PROPERTIES(bp-nfoview PROPERTIES WIN32_EXECUTABLE ON)
