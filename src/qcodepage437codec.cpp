@@ -132,7 +132,7 @@ QByteArray QCodePage437Codec::name() const
 QList<QByteArray> QCodePage437Codec::aliases() const
 {
     QList<QByteArray> list;
-    list << "CP437";
+    list << "CP437" << "cp437" << "437" << "csPC8CodePage437";
     return list;
 }
 

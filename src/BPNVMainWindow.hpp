@@ -61,11 +61,11 @@ public slots:
 	void onActionSwitchToUTF8();
 	void onActionSwitchToCP437();
 	void onActionAbout();
+	void onActionQuit();
 
 	QSize sizeHint() const override;
 
 private:
-	QString currentFile;
 	std::shared_ptr<QByteArray> rawFileData;
 
 	void setupUi();

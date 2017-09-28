@@ -50,13 +50,9 @@ int main( int argc, char* argv[] ){
 
 	parser.process(app);
 
-	BPNVMainWindow *gui;
-	if(parser.positionalArguments().isEmpty()){
-		gui = new BPNVMainWindow;
-	} else {
-		gui = new BPNVMainWindow(parser.positionalArguments());
-	}
+	BPNVMainWindow gui(parser.positionalArguments());
 
-	gui->show();
-	return app.exec();
+	gui.show();
+	auto ret = app.exec();
+	return ret;
 }

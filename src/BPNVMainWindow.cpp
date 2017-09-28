@@ -55,13 +55,12 @@ BPNVMainWindow::BPNVMainWindow(QStringList list) {
 	setupUi();
 
 	if(!list.isEmpty()){
-		currentFile = list[0];
-		loadFile(currentFile);
+		loadFile(list[0]);
 	}
 }
 
 BPNVMainWindow::~BPNVMainWindow() {
-
+	qDebug("MainWindow goes boom!");
 }
 
 bool BPNVMainWindow::loadFile(QString file) {
@@ -110,7 +109,8 @@ void BPNVMainWindow::updateTextBrowser(bool isCP437){
 		QString text;
 
 		if (isCP437) {
-			text = QCodePage437Codec().toUnicode(*rawFileData);
+			auto *codec = QTextCodec::codecForName("IBM437");
+			text = codec->toUnicode(*rawFileData);
 		} else {
 			text = QString::fromUtf8(*rawFileData);
 		}
@@ -299,7 +299,7 @@ void BPNVMainWindow::setupUi() {
 	// connects
 	connect(actionOpen,         SIGNAL(triggered()),   this, SLOT(onActionOpen())          );
 	connect(actionSaveImage,    SIGNAL(triggered()),   this, SLOT(onActionSaveImage())     );
-	connect(actionQuit,         SIGNAL(triggered()),   qApp, SLOT(quit())                  );
+	connect(actionQuit,         SIGNAL(triggered()),   this, SLOT(onActionQuit())          );
 
 	connect(actionStatusBar,    SIGNAL(toggled(bool)), this, SLOT(onActionStatusBar(bool)) );
 	connect(actionColor,        SIGNAL(triggered()),   this, SLOT(onActionColor())         );
@@ -429,4 +429,6 @@ void BPNVMainWindow::onActionAbout() {
 	ad.exec();
 }
 
-
+void BPNVMainWindow::onActionQuit() {
+	qApp->quit();
+}
