@@ -3,7 +3,7 @@
 # PROJECT = "bp-nfoview"                                                       #
 # LICENCE = "GPL"                                                              #
 #                                                                              #
-# Copyright (c) 2010-2016  brainpower <brainpower@mailbox.org>                 #
+# Copyright (c) 2010-2017  brainpower <brainpower@mailbox.org>                 #
 #                                                                              #
 # This file is part of bp-nfoview.                                             #
 #                                                                              #
@@ -26,7 +26,7 @@
 #define BP_NFOVIEW_H
 
 #ifndef MAIN_VERSION
-#define MAIN_VERSION "0.2.2"
+#define MAIN_VERSION "0.2.3"
 #endif // VERSION
 
 #endif // BP_NFOVIEW_H

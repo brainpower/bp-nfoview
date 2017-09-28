@@ -1,2 +1,3 @@
 TODO: Ctrl-F implementation
 TODO: find/implement nicer encoding detection, se comment in BPNVMainWindow::updateTextBrowser()
+TODO: find/implement better url detection

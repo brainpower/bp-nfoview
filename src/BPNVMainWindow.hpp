@@ -3,7 +3,7 @@
 # PROJECT = "bp-nfoview"                                                       #
 # LICENCE = "GPL"                                                              #
 #                                                                              #
-# Copyright (c) 2010-2016  brainpower <brainpower@mailbox.org>                 #
+# Copyright (c) 2010-2017  brainpower <brainpower@mailbox.org>                 #
 #                                                                              #
 # This file is part of bp-nfoview.                                             #
 #                                                                              #
@@ -45,7 +45,7 @@ class BPNVMainWindow : public QMainWindow {
 public:
 	BPNVMainWindow();
 	explicit BPNVMainWindow(QStringList list);
-	virtual ~BPNVMainWindow();
+	~BPNVMainWindow() override;
 
 public slots:
 	bool loadFile(QString file);

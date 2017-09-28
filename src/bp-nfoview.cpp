@@ -3,7 +3,7 @@
 # PROJECT = "bp-nfoview"                                                       #
 # LICENCE = "GPL"                                                              #
 #                                                                              #
-# Copyright (c) 2010-2016  brainpower <brainpower@mailbox.org>                 #
+# Copyright (c) 2010-2017  brainpower <brainpower@mailbox.org>                 #
 #                                                                              #
 # This file is part of bp-nfoview.                                             #
 #                                                                              #
@@ -32,6 +32,7 @@
 
 int main( int argc, char* argv[] ){
 	QApplication app( argc, argv );
+	QCommandLineParser parser;
 
 	app.setApplicationName("bp-nfoview");
 	app.setApplicationDisplayName("brainpower's NfoViewer");
@@ -41,7 +42,6 @@ int main( int argc, char* argv[] ){
 
 	QApplication::setWindowIcon(QIcon(":/img/logo.png"));
 
-	QCommandLineParser parser;
 	parser.setApplicationDescription("A very simple viewer for .nfo files.");
 	parser.addVersionOption();
 	parser.addHelpOption();
@@ -53,6 +53,5 @@ int main( int argc, char* argv[] ){
 	BPNVMainWindow gui(parser.positionalArguments());
 
 	gui.show();
-	auto ret = app.exec();
-	return ret;
+	return app.exec();
 }

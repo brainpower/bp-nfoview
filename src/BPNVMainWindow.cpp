@@ -3,7 +3,7 @@
 # PROJECT = "bp-nfoview"                                                       #
 # LICENCE = "GPL"                                                              #
 #                                                                              #
-# Copyright (c) 2010-2016  brainpower <brainpower@mailbox.org>                 #
+# Copyright (c) 2010-2017  brainpower <brainpower@mailbox.org>                 #
 #                                                                              #
 # This file is part of bp-nfoview.                                             #
 #                                                                              #
@@ -38,7 +38,6 @@
 #include <QTextBrowser>
 #include <QSettings>
 #include <QAction>
-#include <QActionGroup>
 #include <QMenu>
 #include <QMenuBar>
 #include <QStatusBar>
@@ -123,7 +122,7 @@ void BPNVMainWindow::updateTextBrowser(bool isCP437){
 		).arg(
 				text
 						.replace("\n", "<br>\n")                            // add HTML linebreaks
-						.replace(linkRE, "\\1<a href=\"\\2\">\\2</a>\\5")   // add a-Tags around urls
+						.replace(linkRE, R"(\1<a href="\2">\2</a>\5)")   // add a-Tags around urls
 				// TODO this is pretty dump url detection, maybe there are better ways to do this?
 		));
 
@@ -138,7 +137,7 @@ void BPNVMainWindow::saveAsImage(QString filepath) {
 	QPalette pal(textBrowser->palette());
 	QBrush bpen(pal.color(QPalette::Base));
 	QPen fpen(pal.color(QPalette::Text));
-	QPainter *pa=new QPainter(&pixmap);
+	auto *pa=new QPainter(&pixmap);
 
 	//pa->begin(&pixmap);
 	pa->setFont(currentFont);
@@ -151,7 +150,7 @@ void BPNVMainWindow::saveAsImage(QString filepath) {
 	//pa->drawLine(0,140,320,140);
 	pa->end();
 	pixmap.save(filepath);
-	delete pa; pa = 0;
+	delete pa;
 }
 
 
@@ -159,6 +158,126 @@ QSize BPNVMainWindow::sizeHint() const {
 	return QSize(settings->value(QStringLiteral("general/width"),  1024).toInt(),
 	             settings->value(QStringLiteral("general/height"), 1280).toInt())
 			.expandedTo(minimumSizeHint());
+}
+
+void BPNVMainWindow::onActionStatusBar(bool checked ) {
+	if( checked ){
+		statusbar->height();
+		statusbar->show();
+	} else {
+		statusbar->hide();
+	}
+}
+
+void BPNVMainWindow::onActionOpen() {
+	auto recent = settings->value(QStringLiteral("GUI/recentDir"), QStringLiteral("")).toString();
+	auto file = QFileDialog::getOpenFileName(
+			this,
+			QStringLiteral("Open .nfo file..."), // title
+			recent,                              // starting point in FS hierarchy
+			QStringLiteral("nfo Files (*.nfo)")  // filter
+	);
+	if(!file.isEmpty()){
+		settings->setValue(QStringLiteral("GUI/recentDir"), QFileInfo(file).absoluteDir().absolutePath() );
+		loadFile(file);
+	}
+}
+
+void BPNVMainWindow::onActionSaveImage() {
+	auto recent = settings->value(QStringLiteral("GUI/recentDir"), QStringLiteral("")).toString();
+	auto file = QFileDialog::getSaveFileName(
+			this,
+			QStringLiteral("Save to..."),
+			recent,
+			QStringLiteral("Images (*.jpg *.jpeg *.png *.tiff *.bmp *.xpm *.ppm *.xbm)")
+	);
+	if(!file.isEmpty()){
+		settings->setValue(QStringLiteral("GUI/recentDir"), QFileInfo(file).absoluteDir().absolutePath() );
+		saveAsImage(file);
+	}
+}
+
+
+void BPNVMainWindow::onActionColor() {
+	auto p = textBrowser->palette();
+
+	auto bg = QColorDialog::getColor(
+			p.color(QPalette::Base),
+	    this,
+	    QStringLiteral("Choose Background Color")
+	);
+	auto fg = QColorDialog::getColor(
+			p.color(QPalette::WindowText),
+			this,
+			QStringLiteral("Choose Text Color")
+	);
+
+	p.setColor(QPalette::Base,       bg);
+	p.setColor(QPalette::WindowText, fg);
+	p.setColor(QPalette::Text,       fg);
+
+	textBrowser->setPalette(p);
+	textBrowser->setAutoFillBackground(true);
+	textBrowser->repaint();
+
+	settings->setValue(QStringLiteral("GUI/colors"), p);
+}
+
+
+void BPNVMainWindow::onActionDefaultColor() {
+	textBrowser->setPalette(defaultPalette);
+	textBrowser->repaint();
+
+	settings->remove(QStringLiteral("GUI/colors"));
+}
+
+
+void BPNVMainWindow::onActionFont() {
+	bool ok = false;
+	auto font = QFontDialog::getFont(
+			&ok,
+	    textBrowser->font(),
+	    this,
+	    QStringLiteral("Select Font - A fixed size font is recommended")
+	);
+	qDebug("onActionFont: valid font???");
+	if(ok) {
+		qDebug("onActionFont: valid font");
+		textBrowser->setFont(font);
+		textBrowser->repaint();
+
+		currentFont = font;
+		settings->setValue("GUI/font", font);
+	}
+}
+
+
+void BPNVMainWindow::onActionDefaultFont() {
+	textBrowser->setFont(defaultFont);
+
+	settings->remove(QStringLiteral("GUI/font"));
+}
+
+
+void BPNVMainWindow::onActionSwitchToUTF8() {
+	qDebug("onActionSwitchToUTF8()");
+	updateTextBrowser(false);
+}
+
+
+void BPNVMainWindow::onActionSwitchToCP437() {
+	qDebug("onActionSwitchToCP437()");
+	updateTextBrowser(true);
+}
+
+
+void BPNVMainWindow::onActionAbout() {
+	AboutDialog ad(this);
+	ad.exec();
+}
+
+void BPNVMainWindow::onActionQuit() {
+	qApp->quit();
 }
 
 void BPNVMainWindow::setupUi() {
@@ -311,124 +430,4 @@ void BPNVMainWindow::setupUi() {
 	connect(actionCodecCP437,   SIGNAL(triggered()),   this, SLOT(onActionSwitchToCP437()) );
 
 	connect(actionAbout,        SIGNAL(triggered()),   this, SLOT(onActionAbout())         );
-}
-
-void BPNVMainWindow::onActionStatusBar(bool checked ) {
-	if( checked ){
-		statusbar->height();
-		statusbar->show();
-	} else {
-		statusbar->hide();
-	}
-}
-
-void BPNVMainWindow::onActionOpen() {
-	auto recent = settings->value(QStringLiteral("GUI/recentDir"), QStringLiteral("")).toString();
-	auto file = QFileDialog::getOpenFileName(
-			this,
-			QStringLiteral("Open .nfo file..."), // title
-			recent,                              // starting point in FS hierarchy
-			QStringLiteral("nfo Files (*.nfo)")  // filter
-	);
-	if(!file.isEmpty()){
-		settings->setValue(QStringLiteral("GUI/recentDir"), QFileInfo(file).absoluteDir().absolutePath() );
-		loadFile(file);
-	}
-}
-
-void BPNVMainWindow::onActionSaveImage() {
-	auto recent = settings->value(QStringLiteral("GUI/recentDir"), QStringLiteral("")).toString();
-	auto file = QFileDialog::getSaveFileName(
-			this,
-			QStringLiteral("Save to..."),
-			recent,
-			QStringLiteral("Images (*.jpg *.jpeg *.png *.tiff *.bmp *.xpm *.ppm *.xbm)")
-	);
-	if(!file.isEmpty()){
-		settings->setValue(QStringLiteral("GUI/recentDir"), QFileInfo(file).absoluteDir().absolutePath() );
-		saveAsImage(file);
-	}
-}
-
-
-void BPNVMainWindow::onActionColor() {
-	auto p = textBrowser->palette();
-
-	auto bg = QColorDialog::getColor(
-			p.color(QPalette::Base),
-	    this,
-	    QStringLiteral("Choose Background Color")
-	);
-	auto fg = QColorDialog::getColor(
-			p.color(QPalette::WindowText),
-			this,
-			QStringLiteral("Choose Text Color")
-	);
-
-	p.setColor(QPalette::Base,       bg);
-	p.setColor(QPalette::WindowText, fg);
-	p.setColor(QPalette::Text,       fg);
-
-	textBrowser->setPalette(p);
-	textBrowser->setAutoFillBackground(true);
-	textBrowser->repaint();
-
-	settings->setValue(QStringLiteral("GUI/colors"), p);
-}
-
-
-void BPNVMainWindow::onActionDefaultColor() {
-	textBrowser->setPalette(defaultPalette);
-	textBrowser->repaint();
-
-	settings->remove(QStringLiteral("GUI/colors"));
-}
-
-
-void BPNVMainWindow::onActionFont() {
-	bool ok = false;
-	auto font = QFontDialog::getFont(
-			&ok,
-	    textBrowser->font(),
-	    this,
-	    QStringLiteral("Select Font - A fixed size font is recommended")
-	);
-	qDebug("onActionFont: valid font???");
-	if(ok) {
-		qDebug("onActionFont: valid font");
-		textBrowser->setFont(font);
-		textBrowser->repaint();
-
-		currentFont = font;
-		settings->setValue("GUI/font", font);
-	}
-}
-
-
-void BPNVMainWindow::onActionDefaultFont() {
-	textBrowser->setFont(defaultFont);
-
-	settings->remove(QStringLiteral("GUI/font"));
-}
-
-
-void BPNVMainWindow::onActionSwitchToUTF8() {
-	qDebug("onActionSwitchToUTF8()");
-	updateTextBrowser(false);
-}
-
-
-void BPNVMainWindow::onActionSwitchToCP437() {
-	qDebug("onActionSwitchToCP437()");
-	updateTextBrowser(true);
-}
-
-
-void BPNVMainWindow::onActionAbout() {
-	AboutDialog ad(this);
-	ad.exec();
-}
-
-void BPNVMainWindow::onActionQuit() {
-	qApp->quit();
 }

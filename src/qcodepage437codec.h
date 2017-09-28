@@ -3,7 +3,7 @@
 # PROJECT = "bp-nfoview"                                                       #
 # LICENCE = "GPL"                                                              #
 #                                                                              #
-# Copyright (c) 2010-2016  brainpower <brainpower@mailbox.org>                 #
+# Copyright (c) 2010-2017  brainpower <brainpower@mailbox.org>                 #
 #                                                                              #
 # This file is part of bp-nfoview.                                             #
 #                                                                              #
@@ -36,19 +36,18 @@
 
 #include <QtCore/QTextCodec>
 
-class QCodePage437Codec : public QTextCodec
-{
+class QCodePage437Codec : public QTextCodec {
+protected:
+	QCodePage437Codec() = default;
+	~QCodePage437Codec() override = default;
 public:
-    QCodePage437Codec();
-    ~QCodePage437Codec();
-
-    QByteArray name() const;
-    QList<QByteArray> aliases() const;
-    int mibEnum() const;
+	QByteArray name() const override;
+	QList<QByteArray> aliases() const override;
+	int mibEnum() const override;
 
 protected:
-    QString convertToUnicode(const char *in, int length, ConverterState *state) const;
-    QByteArray convertFromUnicode(const QChar *in, int length, ConverterState *state) const;
+	QString convertToUnicode(const char *in, int length, ConverterState *state) const override;
+	QByteArray convertFromUnicode(const QChar *in, int length, ConverterState *state) const override;
 };
 
 static const char hexchars[] = "0123456789ABCDEF";
