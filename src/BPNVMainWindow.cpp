@@ -25,6 +25,7 @@
 #include "BPNVMainWindow.hpp"
 #include "qcodepage437codec.h"
 #include "AboutDialog.hpp"
+#include "config.h"
 
 #ifdef BP_QT5
 #include <QRegularExpression>

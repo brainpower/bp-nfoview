@@ -27,7 +27,7 @@
 #include <QVBoxLayout>
 
 #include "AboutDialog.hpp"
-#include "bp-nfoview.h"
+#include "config.h"
 
 AboutDialog::AboutDialog(QWidget *parent)
 		: QDialog(parent) {

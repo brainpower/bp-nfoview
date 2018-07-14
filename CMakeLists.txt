@@ -1,4 +1,5 @@
 project(bp-nfoview)
+set(MAIN_VERSION "0.2.3")
 
 cmake_minimum_required(VERSION 3.1)
 
@@ -9,7 +10,7 @@ if(USE_QT5)
 	find_package(Qt5Core REQUIRED)
 	find_package(Qt5Widgets REQUIRED)
 
-	add_definitions(-DBP_QT5)
+	set(BP_QT5 TRUE)
 	message(STATUS "Found Qt5.")
 else()
 	find_package(Qt4 4.7)
@@ -50,6 +51,10 @@ IF(WIN32)
 ENDIF(WIN32)
 IF(CMAKE_TOOLCHAIN_FILE)
 ENDIF(CMAKE_TOOLCHAIN_FILE)
+
+
+configure_file(cm_config.h.in config.h @ONLY)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_subdirectory(src)
 

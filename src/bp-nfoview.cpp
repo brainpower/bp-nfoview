@@ -26,7 +26,7 @@
 #include <QCommandLineParser>
 #include <QApplication>
 
-#include "bp-nfoview.h"
+#include "config.h"
 #include "BPNVMainWindow.hpp"
 
 

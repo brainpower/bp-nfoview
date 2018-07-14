@@ -1,0 +1,2 @@
+#cmakedefine MAIN_VERSION "@MAIN_VERSION@"
+#cmakedefine BP_QT5
