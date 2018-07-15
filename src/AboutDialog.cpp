@@ -60,7 +60,7 @@ AboutDialog::AboutDialog(QWidget *parent)
      "<br>"
      "<br>"
      "Copyright (c) 2010-2017 &lt;brainpower@mailbox.org&gt; <br>"
-     "licensed under GPLv3<br>"
+     "licensed under GPLv2<br>"
      "See <a href=\"http://www.gnu.org/licenses/gpl.html\">http://www.gnu.org/licenses/</a> for more info.<br>"
 	));
 
