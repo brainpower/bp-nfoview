@@ -64,6 +64,7 @@ public slots:
 	void onActionQuit();
 
 	QSize sizeHint() const override;
+	void  closeEvent(QCloseEvent *event) override;
 
 private:
 	std::shared_ptr<QByteArray> rawFileData;

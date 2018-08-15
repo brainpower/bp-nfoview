@@ -154,10 +154,16 @@ void BPNVMainWindow::saveAsImage(QString filepath) {
 	delete pa;
 }
 
+void BPNVMainWindow::closeEvent(QCloseEvent *event) {
+	settings->setValue("geometry", saveGeometry());
+	settings->setValue("windowState", saveState());
+	settings->setValue("statusbar", actionStatusBar->isChecked());
+	QMainWindow::closeEvent(event);
+}
 
 QSize BPNVMainWindow::sizeHint() const {
-	return QSize(settings->value(QStringLiteral("general/width"),  1024).toInt(),
-	             settings->value(QStringLiteral("general/height"), 1280).toInt())
+	return QSize(settings->value(QStringLiteral("width"),  1024).toInt(),
+	             settings->value(QStringLiteral("height"), 1280).toInt())
 			.expandedTo(minimumSizeHint());
 }
 
@@ -407,12 +413,6 @@ void BPNVMainWindow::setupUi() {
 	setStatusBar(statusbar);
 	setCentralWidget(textBrowser);
 
-
-	// StatusBar shall be enabled by default
-	bool statusBarEnabled = settings->value(QStringLiteral("general/statusbar"), true).toBool();
-	actionStatusBar->setChecked(statusBarEnabled);
-	onActionStatusBar(statusBarEnabled);
-
 	//statusbar->setBackgroundRole(QPalette::Highlight);
 	//statusbar->setAutoFillBackground(true);
 
@@ -431,4 +431,13 @@ void BPNVMainWindow::setupUi() {
 	connect(actionCodecCP437,   SIGNAL(triggered()),   this, SLOT(onActionSwitchToCP437()) );
 
 	connect(actionAbout,        SIGNAL(triggered()),   this, SLOT(onActionAbout())         );
+
+	// restore window state and geometry
+	restoreGeometry(settings->value("geometry").toByteArray());
+	restoreState(settings->value("windowState").toByteArray());
+
+	// restor StatusBar state
+	bool statusBarEnabled = settings->value(QStringLiteral("statusbar"), true).toBool();
+	actionStatusBar->setChecked(statusBarEnabled);
+	onActionStatusBar(statusBarEnabled);
 }
