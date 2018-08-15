@@ -34,15 +34,18 @@ After that you can use emerge to install:
 
 ... will have to compile from source.
 
+#### Using dpkg on debian based systems
+
 However, for dpkg based distributions you can use the included files in the debian/ folder to create a .deb package by running:
 
     dpkg-buildpackage
 
 
+#### Using CMake
+
 So, to compile this app, make sure you installed the Qt SDK,
 then just run
 
-    cd bp-nfoview
     mkdir build
     cd build
     cmake ..
@@ -51,6 +54,21 @@ then just run
 To install it then, run (may need root permissions)
 
     make install
+
+#### Using meson
+
+Building against Qt4 is not supported with my meson.build, use CMake if you need that.
+
+To build, run:
+
+    meson builddir
+    cd builddir
+    ninja
+    ninja install
+
+You may need root permissions for the install step.
+
+
 
 Also, feel free to contact me
 if you found bugs or you want to make a feature suggestion, I'll try my best then ;)
