@@ -96,14 +96,14 @@ bool BPNVMainWindow::loadFile(QString file) {
 }
 
 void BPNVMainWindow::updateTextBrowser(bool isCP437){
-	qDebug("updateTextBrowser()");
+	//qDebug("updateTextBrowser()");
 	if(rawFileData) {
-		qDebug("updateTextBrowser(): if rawFileData");
+		//qDebug("updateTextBrowser(): if rawFileData");
 
 #ifdef BP_QT5
-		QRegularExpression linkRE(R"x(([^"])((http|https)://([^()"' ]*))([^"]))x" );
+		QRegularExpression linkRE(R"x(([^"])((http|https)://([^()"'<>\s]*))([^"]))x" );
 #else
-		QRegExp linkRE(R"x(([^"])((http|https)://([^()"' ]*))([^"]))x" );
+		QRegExp linkRE(R"x(([^"])((http|https)://([^()"'<>\s]*))([^"]))x" );
 #endif
 
 		QString text;
