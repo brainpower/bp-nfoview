@@ -3,7 +3,7 @@
 # PROJECT = "bp-nfoview"                                                       #
 # LICENCE = "GPL"                                                              #
 #                                                                              #
-# Copyright (c) 2010-2017  brainpower <brainpower@mailbox.org>                 #
+# Copyright (c) 2010-2018  brainpower <brainpower@mailbox.org>                 #
 #                                                                              #
 # This file is part of bp-nfoview.                                             #
 #                                                                              #
@@ -59,7 +59,7 @@ AboutDialog::AboutDialog(QWidget *parent)
      "A simple lightweight nfo-viewer written in C++ using Qt for its interface<br>"
      "<br>"
      "<br>"
-     "Copyright (c) 2010-2017 &lt;brainpower@mailbox.org&gt; <br>"
+     "Copyright (c) 2010-2018 &lt;brainpower@mailbox.org&gt; <br>"
      "licensed under GPLv2<br>"
      "See <a href=\"http://www.gnu.org/licenses/gpl.html\">http://www.gnu.org/licenses/</a> for more info.<br>"
 	));
