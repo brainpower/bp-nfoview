@@ -1,5 +1,5 @@
 
-project('bp-nfoview', 'cpp', default_options: ['cpp_std=c++14'], version: '0.2.4')
+project('bp-nfoview', 'cpp', default_options: ['cpp_std=c++14'], version: '0.2.5')
 
 # {{{ files
 sources = [
