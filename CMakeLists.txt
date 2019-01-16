@@ -9,6 +9,7 @@ option(WIN32 "Build for WIN32 environment..." OFF)
 if(USE_QT5)
 	find_package(Qt5Core REQUIRED)
 	find_package(Qt5Widgets REQUIRED)
+	find_package(Qt5Gui REQUIRED)
 
 	set(BP_QT5 TRUE)
 	message(STATUS "Found Qt5.")
