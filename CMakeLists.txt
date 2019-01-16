@@ -1,5 +1,5 @@
 project(bp-nfoview)
-set(MAIN_VERSION "0.2.5")
+set(MAIN_VERSION "0.2.6")
 
 cmake_minimum_required(VERSION 3.1)
 
