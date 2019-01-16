@@ -34,13 +34,13 @@
 #define QCODEPAGE437CODEC_VERSION "0.1.0"
 #endif // VERSION
 
-#include <QtCore/QTextCodec>
+#include <QTextCodec>
 
 class QCodePage437Codec : public QTextCodec {
 protected:
-	QCodePage437Codec() = default;
 	~QCodePage437Codec() override = default;
 public:
+	QCodePage437Codec() = default;
 	QByteArray name() const override;
 	QList<QByteArray> aliases() const override;
 	int mibEnum() const override;

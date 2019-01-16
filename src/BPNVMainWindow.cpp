@@ -34,7 +34,7 @@
 #endif
 
 
-
+#include <QTextCodec>
 #include <QFile>
 #include <QTextBrowser>
 #include <QSettings>
@@ -60,7 +60,7 @@ BPNVMainWindow::BPNVMainWindow(QStringList list) {
 }
 
 BPNVMainWindow::~BPNVMainWindow() {
-	qDebug("MainWindow goes boom!");
+	//qDebug("MainWindow goes boom!");
 }
 
 bool BPNVMainWindow::loadFile(QString file) {
@@ -109,8 +109,23 @@ void BPNVMainWindow::updateTextBrowser(bool isCP437){
 		QString text;
 
 		if (isCP437) {
+			if(!QTextCodec::availableCodecs().contains("IBM437")) {
+				// if codec is not available on this system or Qt build,
+				// use the included implementation
+				// Qt4 doesn't have it, Qt5 sometimes (linux), sometimes not (OS X)
+
+				// Qt will take ownership of this object and delete it
+				// See: http://doc.qt.io/qt-5/qtextcodec.html#QTextCodec
+				new QCodePage437Codec();
+				qDebug("new 437 instance created");
+			}
 			auto *codec = QTextCodec::codecForName("IBM437");
-			text = codec->toUnicode(*rawFileData);
+			if(codec){
+				text = codec->toUnicode(*rawFileData);
+			} else {
+				qCritical("Could not load codec 'CP437' for unknown reason. This is a bug!");
+				return;
+			}
 		} else {
 			text = QString::fromUtf8(*rawFileData);
 		}
