@@ -26,7 +26,7 @@ cdata.set_quoted('MAIN_VERSION', meson.project_version())
 
 # {{{ dependencies
 qt5 = import('qt5')
-qt5_dep = dependency('qt5', modules: ['Core', 'Widgets'])
+qt5_dep = dependency('qt5', modules: ['Core', 'Widgets', 'Gui'])
 
 if qt5_dep.found()
 	cdata.set('BP_QT5', true)
