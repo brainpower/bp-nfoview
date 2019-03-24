@@ -3,7 +3,7 @@
 # PROJECT = "bp-nfoview"                                                       #
 # LICENCE = "GPL"                                                              #
 #                                                                              #
-# Copyright (c) 2010-2018  brainpower <brainpower@mailbox.org>                 #
+# Copyright (c) 2010-2019  brainpower <brainpower@mailbox.org>                 #
 #                                                                              #
 # This file is part of bp-nfoview.                                             #
 #                                                                              #
@@ -43,6 +43,7 @@
 #include <QMenuBar>
 #include <QStatusBar>
 #include <QCoreApplication>
+#include <QApplication>
 #include <QFileDialog>
 #include <QColorDialog>
 #include <QFontDialog>
@@ -170,6 +171,7 @@ void BPNVMainWindow::saveAsImage(QString filepath) {
 }
 
 void BPNVMainWindow::closeEvent(QCloseEvent *event) {
+  qDebug("BPNVMainWindow::closeEvent triggered, saving state...");
 	settings->setValue("geometry", saveGeometry());
 	settings->setValue("windowState", saveState());
 	settings->setValue("statusbar", actionStatusBar->isChecked());
@@ -299,7 +301,7 @@ void BPNVMainWindow::onActionAbout() {
 }
 
 void BPNVMainWindow::onActionQuit() {
-	qApp->quit();
+  QApplication::closeAllWindows();
 }
 
 void BPNVMainWindow::setupUi() {
