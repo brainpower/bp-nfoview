@@ -1,5 +1,5 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
-	<file>../img/bp-nfoview.png</file>
+	<file>../data/bp-nfoview.png</file>
 </qresource>
 </RCC>
