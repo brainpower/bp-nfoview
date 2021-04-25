@@ -1,31 +1,12 @@
-/**#############################################################################
-#                                                                              #
-# PROJECT = "bp-nfoview"                                                       #
-# LICENCE = "GPL"                                                              #
-#                                                                              #
-# Copyright (c) 2010-2018  brainpower <brainpower@mailbox.org>                 #
-#                                                                              #
-# This file is part of bp-nfoview.                                             #
-#                                                                              #
-# bp-nfoview is free software: you can redistribute it and/or modify           #
-# it under the terms of the GNU General Public License as published by         #
-# the Free Software Foundation, either version 2 of the License, or            #
-# (at your option) any later version.                                          #
-#                                                                              #
-# bp-nfoview is distributed in the hope that it will be useful,                #
-# but WITHOUT ANY WARRANTY; without even the implied warranty of               #
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                         #
-# See the GNU General Public License for more details.                         #
-#                                                                              #
-# You should have received a copy of the GNU General Public License            #
-# along with bp-nfoview.  If not, see <http://www.gnu.org/licenses/>.          #
-#                                                                              #
-#############################################################################**/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright (c) 2010-2021  brainpower <brainpower@mailbox.org>
+
 /* This Code may resemble some other code,
  * cause I got the idea out of some example file
  * if you own such other code and you feel offended
  * you can contact me so we can talk about that matter...
  */
+
 #include "qcodepage437codec.h"
 
 QString QCodePage437Codec::convertToUnicode(const char *in, int length, ConverterState *) const {
