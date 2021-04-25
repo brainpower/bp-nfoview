@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/brainpower/bp-nfoview.svg?branch=master)](https://travis-ci.org/brainpower/bp-nfoview)
+[![CI](https://github.com/brainpower/bp-nfoview/actions/workflows/main.yml/badge.svg)](https://github.com/brainpower/bp-nfoview/actions/workflows/main.yml)
 
 # bp-nfoview
 
