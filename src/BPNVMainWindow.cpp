@@ -125,7 +125,7 @@ void BPNVMainWindow::updateTextBrowser(){
 			"body, p, li, a { white-space: pre-wrap; line-height: %2; }\n"  // dont collapse whitespace!
 			"</style></head><body>%1</body></html>"
 		).arg(
-			text
+			text.toHtmlEscaped() // avoid problems with <, >, & and "
 				.replace(QStringLiteral("\n"), QStringLiteral("<br>\n")) // add HTML linebreaks
 				.replace(linkRE, QStringLiteral(R"(\1<a href="\2">\2</a>\5)"))   // add a-Tags around urls
 				// TODO this is pretty dump url detection, maybe there are better ways to do this?
