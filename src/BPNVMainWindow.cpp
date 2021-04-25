@@ -51,10 +51,10 @@ BPNVMainWindow::~BPNVMainWindow() {
 }
 
 bool BPNVMainWindow::loadFile(QString file) {
-	bool isCP437 = true; // most nfo files are CP437, so assume input file is
+	isCP437 = true; // most nfo files are CP437, so assume input file is
 	QFile nfofile(file);
 
-	if(!nfofile.exists())
+	if (!nfofile.exists())
 		return false;
 
 	nfofile.open(QIODevice::ReadOnly | QIODevice::Text);
@@ -64,25 +64,30 @@ bool BPNVMainWindow::loadFile(QString file) {
 	// TODO: I should put a nicer encoding detection here...
 
 	// this checks for UTF-8 BOM, if it's there, input is probably UTF-8.
-	if( (*rawFileData)[0] == (char)0xEF && (*rawFileData)[1] == (char)0xBB && (*rawFileData)[2] == (char)0xBF ){
+	if (
+    rawFileData->length() > 2 &&
+    (*rawFileData)[0] == (char)0xEF &&
+    (*rawFileData)[1] == (char)0xBB &&
+    (*rawFileData)[2] == (char)0xBF
+  ){
 		isCP437 = false;
 	}
 
-	if(isCP437){
+	if (isCP437){
 		actionCodecCP437->setChecked(true);
 	} else {
 		actionCodecUTF8->setChecked(true); // radio button of codec selector
 	}
-	updateTextBrowser(isCP437);
+	updateTextBrowser();
 
 	// if statusbar is enabled, show a message.
-	if(actionStatusBar->isChecked())
+	if (actionStatusBar->isChecked())
 		statusbar->showMessage(QStringLiteral("'%1' loaded.").arg(file));
 
 	return true;
 }
 
-void BPNVMainWindow::updateTextBrowser(bool isCP437){
+void BPNVMainWindow::updateTextBrowser(){
 	//qDebug("updateTextBrowser()");
 	if(rawFileData) {
     //qDebug("updateTextBrowser(): if rawFileData");
@@ -112,17 +117,20 @@ void BPNVMainWindow::updateTextBrowser(bool isCP437){
 			text = QString::fromUtf8(*rawFileData);
 		}
 
+		double lineHeight = settings->value("lineHeight", 1.0).toDouble();
+
 		textBrowser->setHtml( QStringLiteral(
-				"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-		    "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-				"body, p, li { white-space: pre-wrap; }\n"  // dont collapse whitespace!
-				"</style></head><body>%1</body></html>"
+			"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+		  "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+			"body, p, li, a { white-space: pre-wrap; line-height: %2; }\n"  // dont collapse whitespace!
+			"</style></head><body>%1</body></html>"
 		).arg(
-				text
-						.replace("\n", "<br>\n")                            // add HTML linebreaks
-						.replace(linkRE, R"(\1<a href="\2">\2</a>\5)")   // add a-Tags around urls
+			text
+				.replace(QStringLiteral("\n"), QStringLiteral("<br>\n")) // add HTML linebreaks
+				.replace(linkRE, QStringLiteral(R"(\1<a href="\2">\2</a>\5)"))   // add a-Tags around urls
 				// TODO this is pretty dump url detection, maybe there are better ways to do this?
-		));
+		).arg(lineHeight)
+    );
 
 	}
 }
@@ -243,6 +251,7 @@ void BPNVMainWindow::onActionFont() {
 	    textBrowser->font(),
 	    this,
 	    QStringLiteral("Select Font"),
+      QFontDialog::MonospacedFonts
 	);
 	if(ok) {
 		textBrowser->setFont(font);
@@ -261,14 +270,33 @@ void BPNVMainWindow::onActionDefaultFont() {
 
 
 void BPNVMainWindow::onActionSwitchToUTF8() {
-	qDebug("onActionSwitchToUTF8()");
-	updateTextBrowser(false);
+  isCP437 = false;
+  updateTextBrowser();
 }
 
 
 void BPNVMainWindow::onActionSwitchToCP437() {
-	qDebug("onActionSwitchToCP437()");
-	updateTextBrowser(true);
+  isCP437 = true;
+  updateTextBrowser();
+}
+
+
+void BPNVMainWindow::onActionLineHeight() {
+  bool ok;
+  const double old = settings->value(QStringLiteral("lineHeight"), 1.0).toDouble();
+  const double lineHeight = QInputDialog::getDouble(
+    this,
+    QStringLiteral("Set line height..."), // title
+    QStringLiteral("Line Height:"),    // label
+    old, // default value
+    0.0, // minimum
+    2.0, // maximum
+    2,   // decimals
+    &ok, Qt::WindowFlags(),
+    0.01 // stepping
+  );
+  settings->setValue(QStringLiteral("lineHeight"), lineHeight);
+  updateTextBrowser();
 }
 
 
@@ -302,6 +330,7 @@ void BPNVMainWindow::setupUi() {
 	actionDefaultColor = new QAction(this);
 	actionFont         = new QAction(this);
 	actionDefaultFont  = new QAction(this);
+  actionLineHeight   = new QAction(this);
 	// Menu -> View -> Codec
 	agCodec            = new QActionGroup(this);
 	actionCodecUTF8    = new QAction(this);
@@ -375,6 +404,7 @@ void BPNVMainWindow::setupUi() {
 	menuView->addAction(actionDefaultColor);
 	menuView->addAction(actionFont);
 	menuView->addAction(actionDefaultFont);
+	menuView->addAction(actionLineHeight);
 	menuView->addAction(menuViewCodec->menuAction());
 	// Menu -> View -> Codec
 	menuViewCodec->addAction(actionCodecCP437);
@@ -394,6 +424,7 @@ void BPNVMainWindow::setupUi() {
 	actionDefaultColor->setText(QStringLiteral(   "Restore default color"          ));
 	actionFont->setText(QStringLiteral(           "Select custom Font..."          ));
 	actionDefaultFont->setText(QStringLiteral(    "Restore default font"           ));
+	actionLineHeight->setText(QStringLiteral(     "Select line height..."          ));
 
 	menuViewCodec->setTitle(QStringLiteral(     "Encoding"                         ));
 	actionCodecCP437->setText(QStringLiteral(     "CP 437"                         ));
@@ -420,6 +451,7 @@ void BPNVMainWindow::setupUi() {
 	connect(actionDefaultColor, SIGNAL(triggered()),   this, SLOT(onActionDefaultColor())  );
 	connect(actionFont,         SIGNAL(triggered()),   this, SLOT(onActionFont())          );
 	connect(actionDefaultFont,  SIGNAL(triggered()),   this, SLOT(onActionDefaultFont())   );
+	connect(actionLineHeight,   SIGNAL(triggered()),   this, SLOT(onActionLineHeight())    );
 
 	connect(actionCodecUTF8,    SIGNAL(triggered()),   this, SLOT(onActionSwitchToUTF8())  );
 	connect(actionCodecCP437,   SIGNAL(triggered()),   this, SLOT(onActionSwitchToCP437()) );

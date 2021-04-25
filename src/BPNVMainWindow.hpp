@@ -40,6 +40,7 @@ public slots:
 	void onActionDefaultFont();
 	void onActionSwitchToUTF8();
 	void onActionSwitchToCP437();
+  void onActionLineHeight();
 	void onActionAbout();
 	void onActionQuit();
 
@@ -47,7 +48,9 @@ public slots:
 	void  closeEvent(QCloseEvent *event) override;
 
 private:
+  // FIXME: unique_ptr ?
 	std::shared_ptr<QByteArray> rawFileData;
+  bool isCP437 = true;
 
 	void setupUi();
 
@@ -63,6 +66,7 @@ private:
 	        *actionStatusBar,
 	        *actionColor, *actionDefaultColor,
 	        *actionFont,  *actionDefaultFont,
+          *actionLineHeight,
 	        *actionCodecUTF8, *actionCodecCP437;
 	QActionGroup *agCodec;
 
@@ -82,7 +86,7 @@ private:
 
 
 private slots:
-	void updateTextBrowser(bool isCP437);
+	void updateTextBrowser();
 };
 
 #endif //BP_NFOVIEW_BPNVMAINWINDOW_HPP
