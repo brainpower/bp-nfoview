@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright (c) 2010-2021  brainpower <brainpower@mailbox.org>
 
+#include "config.hpp"
+
+#include "BPNVMainWindow.hpp"
 
 #include <QCommandLineParser>
 #include <QApplication>
-
-#include "config.h"
-#include "BPNVMainWindow.hpp"
 
 
 int main( int argc, char* argv[] ){

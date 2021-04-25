@@ -8,24 +8,32 @@
 #include "qcodepage437codec.h"
 #include "AboutDialog.hpp"
 
-#include <QRegularExpression>
+#include <QApplication>
+#include <QCoreApplication>
 
-
-#include <QTextCodec>
+// core
 #include <QFile>
-#include <QTextBrowser>
+#include <QRegularExpression>
 #include <QSettings>
+#include <QTextCodec>
+
+// gui
+#include <QPainter>
+
+// widgets
 #include <QAction>
 #include <QActionGroup>
 #include <QMenu>
 #include <QMenuBar>
 #include <QStatusBar>
-#include <QCoreApplication>
-#include <QApplication>
-#include <QFileDialog>
+#include <QTextBrowser>
+
+// dialogs
 #include <QColorDialog>
+#include <QFileDialog>
 #include <QFontDialog>
-#include <QPainter>
+#include <QInputDialog>
+
 
 BPNVMainWindow::BPNVMainWindow() {
 	setupUi();
