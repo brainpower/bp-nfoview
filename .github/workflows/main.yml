@@ -2,16 +2,18 @@
 
 name: CI
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
+    branches: [ master, test ]
+    tags: [ "*" ]
   pull_request:
     branches: [ master ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -20,18 +22,157 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        compiler:
+          - name: gcc
+            cc: gcc
+            cxx: g++
+          - name: clang
+            cc: clang
+            cxx: clang++
+
+    name: "Build and test using ${{ matrix.compiler.name }}"
+    env:
+      CC: ${{ matrix.compiler.cc }}
+      CXX: ${{ matrix.compiler.cxx }}
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Update
+      - name: apt update
         run: sudo apt-get update
+      - name: apt upgrade
+        run: sudo apt-get dist-upgrade
       - name: Install Qt
-        run: sudo apt-get install build-essential qt5-default meson
+        run: sudo apt-get install build-essential qt5-default meson clang
 
       # Runs a set of commands using the runners shell
       - name: Configure build
-        run: meson builddir -Dwarning_level=3 # -Dwerror=true # cant use this, fails inside Qt code :(
+        run: meson builddir --buildtype debugoptimized -Dwarning_level=3 # -Dwerror=true # cant use this, fails inside Qt code :(
       - name: Compile
         run: ninja -C builddir
+      #- name: Run Tests
+      #  run: ninja -C builddir test
+
+
+  build_appimage:
+    if: startsWith( github.ref, 'refs/tags/' )
+    needs:
+      - build # only try this if basic build succeeds
+    runs-on: ubuntu-16.04 # use the oldest to create the appimage, to make sure it runs almost everywhere
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check for system updates
+        run: |
+          sudo apt-get update
+          sudo apt-get dist-upgrade
+      - name: Install Qt5 and build essentials
+        run: |
+          sudo apt-get install build-essential qt5-default wget python3-pip python3-setuptools
+          sudo apt-get -t xenial-backports install ninja-build
+          # stupid old ubuntu has waay to old meson, so install it using pip
+          # but dont install newest, because it requires python >= 3.6 while xenial only has 3.5
+          sudo pip3 install 'meson~=0.56.2'
+      - name: Download linuxdeploy
+        run: |
+          wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+          chmod +x *.AppImage
+
+      - name: Configure build
+        run: |
+          meson --version
+          meson builddir --buildtype release -Dprefix=/usr
+
+      - name: Compile
+        run: ninja -C builddir
+
+      - name: Install into AppDir
+        run: DESTDIR="$PWD/AppDir" ninja -C builddir install
+
+      - name: Create AppImage
+        run: |
+          VERSION=$(echo "${{ github.ref }}" | sed -r 's@.*/([^/]+)$@\1@')
+          export VERSION
+          ./linuxdeploy-x86_64.AppImage --appdir AppDir/ --plugin qt --output appimage
+
+      - name: Upload AppImage artifacts
+        uses: actions/upload-artifact@main
+        with:
+          name: appimages
+          path: bp-nfoview-*.AppImage
+
+
+  build_windows_exe:
+    if: startsWith( github.ref, 'refs/tags/' )
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check for system updates
+        run: |
+          sudo apt-get update
+          sudo apt-get dist-upgrade
+      - name: Install MXE
+        run: |
+          sudo apt-get install build-essential meson software-properties-common lsb-release
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 86B72ED9 && \
+          sudo add-apt-repository "deb [arch=amd64] https://pkg.mxe.cc/repos/apt $(lsb_release -sc) main" && \
+          sudo apt-get update
+      - name: Install dependencies from MXE
+        run: |
+          sudo apt-get install mxe-x86-64-w64-mingw32.static-cc mxe-x86-64-w64-mingw32.static-qt5 # qtbase may be enough
+          echo "/usr/lib/mxe/usr/bin" >> $GITHUB_PATH
+
+      - name: Configure build
+        run: meson builddir --buildtype release --cross-file meson/x86_64-w64-mingw32.static-combined.ini --default-library static
+
+      - name: Compile
+        run: ninja -C builddir
+
+      - name: Add version and architecture to filename
+        run: |
+          version=$(echo "${{ github.ref }}" | sed -r 's@.*/([^/]+)$@\1@')
+          mv -v builddir/bp-nfoview.exe "bp-nfoview-${version}-x86_64.exe"
+
+      - name: Upload Windows Executable artifacts
+        uses: actions/upload-artifact@main
+        with:
+          name: windows-static
+          path: bp-nfoview-*.exe
+
+
+  create_release:
+    if: startsWith(github.ref, 'refs/tags/v') # only release tags starting with v
+    needs:
+      - build_appimage
+      - build_windows_exe
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download AppImage artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: appimages
+      - name: Download AppImage artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: windows-static
+
+      - name: Create release draft
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="${{ github.ref }}"
+          # Cut off the "refs/tags" prefix.
+          tag="${tag#"refs/tags/"}"
+          version="${tag#refs/tags/v}"
+          hub release create \
+            --draft \
+            --attach "bp-nfoview-${version}-x86_64.AppImage" \
+            --attach "bp-nfoview-${version}-x86_64.exe" \
+            "${tag}"
