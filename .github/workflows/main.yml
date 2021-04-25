@@ -32,6 +32,6 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Configure build
-        run: meson builddir -Dwerror=true -Dwarning_level=3
+        run: meson builddir -Dwarning_level=3 # -Dwerror=true # cant use this, fails inside Qt code :(
       - name: Compile
         run: ninja -C builddir
