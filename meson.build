@@ -3,7 +3,7 @@ project(
   'bp-nfoview',
   'cpp',
   default_options: ['cpp_std=c++14'],
-  version: '0.2.8',
+  version: '0.3.0',
   meson_version: '>= 0.44.0'
 )
 
