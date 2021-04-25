@@ -2,16 +2,13 @@
 // Copyright (c) 2010-2021  brainpower <brainpower@mailbox.org>
 
 
+#include "config.hpp"
+
 #include "BPNVMainWindow.hpp"
 #include "qcodepage437codec.h"
 #include "AboutDialog.hpp"
-#include "config.h"
 
-#ifdef BP_QT5
 #include <QRegularExpression>
-#else
-#include <QRegExp>
-#endif
 
 
 #include <QTextCodec>
@@ -19,6 +16,7 @@
 #include <QTextBrowser>
 #include <QSettings>
 #include <QAction>
+#include <QActionGroup>
 #include <QMenu>
 #include <QMenuBar>
 #include <QStatusBar>
@@ -79,14 +77,9 @@ bool BPNVMainWindow::loadFile(QString file) {
 void BPNVMainWindow::updateTextBrowser(bool isCP437){
 	//qDebug("updateTextBrowser()");
 	if(rawFileData) {
-		//qDebug("updateTextBrowser(): if rawFileData");
+    //qDebug("updateTextBrowser(): if rawFileData");
 
-#ifdef BP_QT5
-		QRegularExpression linkRE(R"x(([^"])((http|https)://([^()"'<>\s]*))([^"]))x" );
-#else
-		QRegExp linkRE(R"x(([^"])((http|https)://([^()"'<>\s]*))([^"]))x" );
-#endif
-
+    QRegularExpression linkRE(QStringLiteral(R"x(([^"])((http|https)://([^()"'<>\s]*))([^"]))x" ));
 		QString text;
 
 		if (isCP437) {

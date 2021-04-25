@@ -1,0 +1,1 @@
+option('qt_version', type: 'combo', choices: ['auto', 'qt5', 'qt6'], value: 'auto')
