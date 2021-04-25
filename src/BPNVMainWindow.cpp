@@ -152,10 +152,9 @@ void BPNVMainWindow::saveAsImage(QString filepath) {
 }
 
 void BPNVMainWindow::closeEvent(QCloseEvent *event) {
-  qDebug("BPNVMainWindow::closeEvent triggered, saving state...");
-	settings->setValue("geometry", saveGeometry());
-	settings->setValue("windowState", saveState());
-	settings->setValue("statusbar", actionStatusBar->isChecked());
+	settings->setValue(QStringLiteral("geometry"), saveGeometry());
+	settings->setValue(QStringLiteral("windowState"), saveState());
+	settings->setValue(QStringLiteral("statusbar"), actionStatusBar->isChecked());
 	QMainWindow::closeEvent(event);
 }
 
@@ -243,24 +242,21 @@ void BPNVMainWindow::onActionFont() {
 			&ok,
 	    textBrowser->font(),
 	    this,
-	    QStringLiteral("Select Font - A fixed size font is recommended")
+	    QStringLiteral("Select Font"),
 	);
-	qDebug("onActionFont: valid font???");
 	if(ok) {
-		qDebug("onActionFont: valid font");
 		textBrowser->setFont(font);
 		textBrowser->repaint();
 
 		currentFont = font;
-		settings->setValue("GUI/font", font);
+		settings->setValue(QStringLiteral("GUI/font"), font);
 	}
 }
 
 
 void BPNVMainWindow::onActionDefaultFont() {
-	textBrowser->setFont(defaultFont);
-
-	settings->remove(QStringLiteral("GUI/font"));
+  textBrowser->setFont(defaultFont);
+  settings->remove(QStringLiteral("GUI/font"));
 }
 
 
@@ -324,14 +320,14 @@ void BPNVMainWindow::setupUi() {
 	statusbar = new QStatusBar(this);
 
 	// Actions
-	actionOpen->setIcon(QIcon::fromTheme("document-open"));
-	actionQuit->setIcon(QIcon::fromTheme("application-exit"));
-	actionSaveImage->setIcon(QIcon::fromTheme("document-save-as"));
-	actionFont->setIcon(QIcon::fromTheme("fonts-package"));
-	actionDefaultFont->setIcon(QIcon::fromTheme("fonts-package"));
-	actionColor->setIcon(QIcon::fromTheme("fill-color"));
-	actionDefaultColor->setIcon(QIcon::fromTheme("fill-color"));
-	actionAbout->setIcon(QIcon::fromTheme("help-about"));
+	actionOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
+	actionQuit->setIcon(QIcon::fromTheme(QStringLiteral("application-exit")));
+	actionSaveImage->setIcon(QIcon::fromTheme(QStringLiteral("document-save-as")));
+	actionFont->setIcon(QIcon::fromTheme(QStringLiteral("fonts-package")));
+	actionDefaultFont->setIcon(QIcon::fromTheme(QStringLiteral("fonts-package")));
+	actionColor->setIcon(QIcon::fromTheme(QStringLiteral("fill-color")));
+	actionDefaultColor->setIcon(QIcon::fromTheme(QStringLiteral("fill-color")));
+	actionAbout->setIcon(QIcon::fromTheme(QStringLiteral("help-about")));
 
 	actionOpen->setShortcut(QKeySequence(QKeySequence::Open));
 	actionQuit->setShortcut(QKeySequence(QKeySequence::Quit));
@@ -431,8 +427,8 @@ void BPNVMainWindow::setupUi() {
 	connect(actionAbout,        SIGNAL(triggered()),   this, SLOT(onActionAbout())         );
 
 	// restore window state and geometry
-	restoreGeometry(settings->value("geometry").toByteArray());
-	restoreState(settings->value("windowState").toByteArray());
+	restoreGeometry(settings->value(QStringLiteral("geometry")).toByteArray());
+	restoreState(settings->value(QStringLiteral("windowState")).toByteArray());
 
 	// restor StatusBar state
 	bool statusBarEnabled = settings->value(QStringLiteral("statusbar"), true).toBool();

@@ -13,11 +13,11 @@ int main( int argc, char* argv[] ){
 	QApplication app( argc, argv );
 	QCommandLineParser parser;
 
-	app.setApplicationName("bp-nfoview");
-	app.setApplicationDisplayName("brainpower's NfoViewer");
-	app.setOrganizationName("brainpower");
-	app.setOrganizationDomain("de.brainpower");
-	app.setApplicationVersion(MAIN_VERSION);
+	app.setApplicationName(QStringLiteral("bp-nfoview"));
+	app.setApplicationDisplayName(QStringLiteral("brainpower's NfoViewer"));
+	app.setOrganizationName(QStringLiteral("brainpower"));
+	app.setOrganizationDomain(QStringLiteral("de.brainpower"));
+	app.setApplicationVersion(QStringLiteral(MAIN_VERSION));
 
 	QApplication::setWindowIcon(QIcon(":/img/logo.png"));
 
