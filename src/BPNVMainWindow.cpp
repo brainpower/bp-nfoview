@@ -292,8 +292,10 @@ void BPNVMainWindow::onActionLineHeight() {
     0.0, // minimum
     2.0, // maximum
     2,   // decimals
-    &ok, Qt::WindowFlags(),
-    0.01 // stepping
+    &ok, Qt::WindowFlags()
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+    , 0.01 // stepping
+#endif
   );
   settings->setValue(QStringLiteral("lineHeight"), lineHeight);
   updateTextBrowser();
