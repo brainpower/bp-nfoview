@@ -1,1 +1,3 @@
 option('qt_version', type: 'combo', choices: ['auto', 'qt5', 'qt6'], value: 'auto')
+option('static', type: 'boolean', value: false)
+option('tests', type: 'boolean', value: true)

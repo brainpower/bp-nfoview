@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master, test ]
+    branches: [ master ]
     tags: [ "*" ]
   pull_request:
     branches: [ master ]
@@ -54,8 +54,8 @@ jobs:
         run: meson builddir --buildtype debugoptimized -Dwarning_level=3 # -Dwerror=true # cant use this, fails inside Qt code :(
       - name: Compile
         run: ninja -C builddir
-      #- name: Run Tests
-      #  run: ninja -C builddir test
+      - name: Run Tests
+        run: ninja -C builddir test
 
 
   build_appimage:

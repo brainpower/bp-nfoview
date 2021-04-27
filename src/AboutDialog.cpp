@@ -40,7 +40,7 @@ AboutDialog::AboutDialog(QWidget *parent)
      "A simple lightweight nfo-viewer written in C++ using Qt for its interface<br>"
      "<br>"
      "<br>"
-     "Copyright (c) 2010-2018 &lt;brainpower@mailbox.org&gt; <br>"
+     "Copyright (c) " MAIN_CPYRGT_YEAR " &lt;brainpower@mailbox.org&gt; <br>"
      "licensed under GPLv2<br>"
      "See <a href=\"http://www.gnu.org/licenses/gpl.html\">http://www.gnu.org/licenses/</a> for more info.<br>"
 	));
