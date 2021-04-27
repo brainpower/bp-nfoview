@@ -84,7 +84,6 @@ jobs:
 
       - name: Configure build
         run: |
-          meson --version
           meson builddir --buildtype release -Dprefix=/usr
 
       - name: Compile
@@ -129,7 +128,7 @@ jobs:
           echo "/usr/lib/mxe/usr/bin" >> $GITHUB_PATH
 
       - name: Configure build
-        run: meson builddir --buildtype release --cross-file meson/x86_64-w64-mingw32.static-combined.ini --default-library static
+        run: meson builddir --buildtype release --cross-file meson/x86_64-w64-mingw32.static-combined.ini --default-library static -Dstatic=true
 
       - name: Compile
         run: ninja -C builddir
