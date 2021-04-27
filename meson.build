@@ -5,7 +5,7 @@ project(
   default_options: ['cpp_std=c++14'],
   version: '0.3.0',
   license: 'GPL-2.0-or-later',
-  meson_version: '>= 0.47.0'
+  meson_version: '>= 0.52.0'
 )
 static_build = get_option('static')
 
@@ -113,7 +113,13 @@ foreach qt_version, qt_verprefix : qt_versions
   endif
 
   qt = import(qt_version)
-  qt_dep = dependency(qt_version, modules: qt_modules, required: false, static: static_build)
+  qt_dep = dependency(
+    qt_version,
+    modules: qt_modules,
+    required: false,
+    static: static_build,
+    include_type: 'system' # so we dont get compiler warnings from inside QT headers
+  )
   cdata.set('HAS_' + qt_version.to_upper(), qt_dep.found())
 
   if qt_dep.found()
@@ -121,7 +127,13 @@ foreach qt_version, qt_verprefix : qt_versions
     if qt_exact_version.version_compare('>= 6.0.0') # and qt_exact_version.version_compare('< 6.x.y')
       message('For this version of Qt6 an additional module is needed: Core5Compat')
       qt_modules += 'Core5Compat'
-      qt_dep = dependency(qt_version, modules: qt_modules, required: false, static: static_build)
+      qt_dep = dependency(
+        qt_version,
+        modules: qt_modules,
+        required: false,
+        static: static_build,
+        include_type: 'system' # so we dont get compiler warnings from inside QT headers
+      )
       # update cdata to not define HAS_QT6, if Core5Compat not found
       cdata.set('HAS_' + qt_version.to_upper(), qt_dep.found())
     endif
