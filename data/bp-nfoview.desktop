@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Comment=Simple NFO-Viewer by brainpower
 Comment[de_DE]=Einfacher NFO-Viewer von brainpower
 Exec=bp-nfoview %f
