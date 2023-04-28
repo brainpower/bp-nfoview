@@ -31,11 +31,17 @@ jobs:
           - name: clang
             cc: clang
             cxx: clang++
+        qt_version:
+          - name: Qt5
+            major: 5
+          - name: Qt6
+            major: 6
 
     name: "Build and test using ${{ matrix.compiler.name }}"
     env:
       CC: ${{ matrix.compiler.cc }}
       CXX: ${{ matrix.compiler.cxx }}
+      QT_MAJOR_VERSION: ${{ matrix.qt_version.major }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -47,11 +53,24 @@ jobs:
       - name: apt upgrade
         run: sudo apt-get dist-upgrade
       - name: Install Qt
-        run: sudo apt-get install build-essential qt5-default meson clang desktop-file-utils
+        run: >-
+          sudo apt-get install
+            build-essential
+            qt${{ matrix.qt_version.major }}-base-dev
+            qt${{ matrix.qt_version.major }}-svg-dev
+            qt${{ matrix.qt_version.major }}-5compat-dev
+            meson
+            clang
+            desktop-file-utils
 
       # Runs a set of commands using the runners shell
       - name: Configure build
-        run: meson builddir --buildtype debugoptimized -Dwarning_level=3 # -Dwerror=true # cant use this, fails inside Qt code :(
+        run: >-
+          meson builddir
+            --buildtype debugoptimized
+            -Dwarning_level=3
+            -Dqt_version=qt${{ matrix.qt_version.major }}
+        # -Dwerror=true # cant use this, fails inside Qt code :(
       - name: Compile
         run: ninja -C builddir
       - name: Run Tests
