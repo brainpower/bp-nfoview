@@ -3,7 +3,7 @@ project(
   'bp-nfoview',
   'cpp',
   default_options: ['cpp_std=c++14'],
-  version: '0.3.0',
+  version: '0.3.1',
   license: 'GPL-2.0-or-later',
   meson_version: '>= 0.57.0'
 )
@@ -91,7 +91,7 @@ qt_plugins = {
 # {{{ config
 configuration_inc = include_directories('.')
 cdata = configuration_data()
-cdata.set_quoted('MAIN_CPYRGT_YEAR', '2010 - 2021')
+cdata.set_quoted('MAIN_CPYRGT_YEAR', '2010 - 2023')
 cdata.set_quoted('MAIN_VERSION', meson.project_version())
 #cdata.set('BINDIR', join_paths(get_option('prefix'), get_option('bindir'), '')) # the '' produces a trailing /, needed here
 cdata.set('STATIC_BUILD', static_build)

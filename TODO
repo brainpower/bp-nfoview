@@ -1,3 +1,4 @@
 TODO: Ctrl-F implementation
-TODO: find/implement nicer encoding detection, se comment in BPNVMainWindow::updateTextBrowser()
+TODO: find/implement nicer encoding detection, see comment in BPNVMainWindow::updateTextBrowser()
 TODO: find/implement better url detection
+TODO: checks in loadFile probably should trigger QMessageBoxes or something, if they fail
