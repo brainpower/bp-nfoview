@@ -5,7 +5,7 @@ project(
   default_options: ['cpp_std=c++14'],
   version: '0.3.0',
   license: 'GPL-2.0-or-later',
-  meson_version: '>= 0.52.0'
+  meson_version: '>= 0.57.0'
 )
 static_build = get_option('static')
 
@@ -101,7 +101,7 @@ cdata.set('STATIC_BUILD', static_build)
 qt_ver = get_option('qt_version')
 
 if qt_ver != 'auto'
-  qt_versions = [qt_ver]
+  qt_versions = {qt_ver: qt_versions[qt_ver]}
 endif
 
 foreach qt_version, qt_verprefix : qt_versions
@@ -280,6 +280,6 @@ install_data(
 if get_option('tests')
   dfv = find_program('desktop-file-validate', required: false)
   if dfv.found()
-    test('validate desktop file', dfv, args: [join_paths(meson.source_root(), 'data', 'bp-nfoview.desktop')])
+    test('validate desktop file', dfv, args: files(join_paths('data', 'bp-nfoview.desktop')))
   endif
 endif
