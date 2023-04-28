@@ -53,22 +53,22 @@ jobs:
       - name: apt upgrade
         run: sudo apt-get dist-upgrade
       - name: Install Qt
-        run: >-
-          sudo apt-get install
-            build-essential
-            qt${{ matrix.qt_version.major }}-base-dev
-            qt${{ matrix.qt_version.major }}-svg-dev
-            qt${{ matrix.qt_version.major }}-5compat-dev
-            meson
-            clang
-            desktop-file-utils
+        run: |
+          sudo apt-get install \
+            build-essential \
+            qt${{ matrix.qt_version.major }}-base-dev \
+            qt${{ matrix.qt_version.major }}-svg-dev \
+            qt${{ matrix.qt_version.major }}-5compat-dev \
+            meson \
+            clang \
+            desktop-file-utils \
 
       # Runs a set of commands using the runners shell
       - name: Configure build
-        run: >-
-          meson builddir
-            --buildtype debugoptimized
-            -Dwarning_level=3
+        run: |
+          meson builddir \
+            --buildtype debugoptimized \
+            -Dwarning_level=3 \
             -Dqt_version=qt${{ matrix.qt_version.major }}
         # -Dwerror=true # cant use this, fails inside Qt code :(
       - name: Compile
@@ -129,26 +129,24 @@ jobs:
     needs:
       - build
     runs-on: ubuntu-latest
+    container:
+      image: archlinux
+    env:
+      QT_MAJOR_VERSION: 6
     steps:
       - uses: actions/checkout@v2
-      - name: Check for system updates
-        run: |
-          sudo apt-get update
-          sudo apt-get dist-upgrade
-      - name: Install MXE
-        run: |
-          sudo apt-get install build-essential meson software-properties-common lsb-release
-          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 86B72ED9 && \
-          sudo add-apt-repository "deb [arch=amd64] https://pkg.mxe.cc/repos/apt $(lsb_release -sc) main" && \
-          sudo apt-get update
-      - name: Install dependencies from MXE
-        run: |
-          sudo apt-get install mxe-x86-64-w64-mingw32.static-cc mxe-x86-64-w64-mingw32.static-qt5 # qtbase may be enough
-          echo "/usr/lib/mxe/usr/bin" >> $GITHUB_PATH
+
+      - name: Prepare Cross Complie environment
+        run: ./.github/workflows/scripts/prepare-cross-env.sh
 
       - name: Configure build
-        run: meson builddir --buildtype release --cross-file meson/x86_64-w64-mingw32.static-combined.ini --default-library static -Dstatic=true
-
+        run: |
+          x86_64-w64-mingw32-cmake \
+            -GNinja \
+            -DCMAKE_BUILD_TYPE=Release
+            -DBUILD_STATIC=ON \
+            -DQT_MAJOR_VERSION=6 \
+            -B builddir .
       - name: Compile
         run: ninja -C builddir
 

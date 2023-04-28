@@ -5,7 +5,7 @@ project(
   default_options: ['cpp_std=c++14'],
   version: '0.3.1',
   license: 'GPL-2.0-or-later',
-  meson_version: '>= 0.57.0'
+  meson_version: '>= 0.53.0'
 )
 static_build = get_option('static')
 
@@ -157,7 +157,7 @@ endif
 
 static_deps = []
 if static_build
-  pkgc = find_program('pkg-config')
+  pkgc = find_program('pkgconfig')
   rc = run_command(pkgc, '--variable=prefix', qt_libprefix + 'Core')
   if rc.returncode() != 0
     qmake = find_program('qmake', 'qmake-' + qt_found)
@@ -207,10 +207,14 @@ if static_build
         endif
       endforeach
       foreach qlibname : data['qlibs']
-        if mver.version_compare('>= 0.51.0')
-          xdeps += cxx.find_library(qt_libprefix + qlibname, dirs: libdir, required: data['required'], static: true)
+        if qt_dep.version().version_compare('>=6.0.0')
+          # does not need these wit h Qt6
         else
-          xdeps += find_library(qt_libprefix + qlibname, dirs: libdir, required: data['required'], static: true)
+          if mver.version_compare('>= 0.51.0')
+            xdeps += cxx.find_library(qt_libprefix + qlibname, dirs: libdir, required: data['required'], static: true)
+          else
+            xdeps += find_library(qt_libprefix + qlibname, dirs: libdir, required: data['required'], static: true)
+          endif
         endif
       endforeach
       if allfound
