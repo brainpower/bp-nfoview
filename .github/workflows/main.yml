@@ -34,43 +34,49 @@ jobs:
         qt_version:
           - name: Qt5
             major: 5
+            packages: "qtbase5-dev qtbase5-dev-tools qt5-qmake"
           - name: Qt6
             major: 6
+            packages: "qt6-base-dev qt6-base-dev-tools libqt6svg6-dev libqt6core5compat6-dev qmake6"
+            #packages: "qt6-base-dev qt6-svg-dev qt6-5compat-dev"
 
-    name: "Build and test using ${{ matrix.compiler.name }}"
+    name: "Build and test using ${{ matrix.compiler.name }} - Qt${{ matrix.qt_version.major }}"
     env:
       CC: ${{ matrix.compiler.cc }}
       CXX: ${{ matrix.compiler.cxx }}
       QT_MAJOR_VERSION: ${{ matrix.qt_version.major }}
+      QT_SELECT: qt${{ matrix.qt_version.major }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
+      - name: System Information
+        run: cat /etc/os-release
       - name: apt update
         run: sudo apt-get update
       - name: apt upgrade
-        run: sudo apt-get dist-upgrade
+        run: sudo apt-get remove firefox && sudo apt-get dist-upgrade
       - name: Install Qt
         run: |
           sudo apt-get install \
             build-essential \
-            qt${{ matrix.qt_version.major }}-base-dev \
-            qt${{ matrix.qt_version.major }}-svg-dev \
-            qt${{ matrix.qt_version.major }}-5compat-dev \
-            meson \
+            ${{ matrix.qt_version.packages }} \
+            cmake \
             clang \
-            desktop-file-utils \
-
-      # Runs a set of commands using the runners shell
+            desktop-file-utils
+      - name: QMake Info
+        run: qtchooser -install qt${{ matrix.qt_version.major }} /usr/lib/qt${{ matrix.qt_version.major }}/bin/qmake); qmake -query || true
       - name: Configure build
         run: |
-          meson builddir \
-            --buildtype debugoptimized \
-            -Dwarning_level=3 \
-            -Dqt_version=qt${{ matrix.qt_version.major }}
-        # -Dwerror=true # cant use this, fails inside Qt code :(
+          cmake \
+            -G Ninja \
+            -D CMAKE_BUILD_TYPE=Debug \
+            -D QT_MAJOR_VERSION=${{ matrix.qt_version.major }} \
+            -D BUILD_TESTING=ON \
+            -B builddir \
+            .
       - name: Compile
         run: ninja -C builddir
       - name: Run Tests
@@ -81,20 +87,16 @@ jobs:
     if: startsWith( github.ref, 'refs/tags/' )
     needs:
       - build # only try this if basic build succeeds
-    runs-on: ubuntu-16.04 # use the oldest to create the appimage, to make sure it runs almost everywhere
+    runs-on: ubuntu-20.04 # use the oldest to create the appimage, to make sure it runs almost everywhere
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Check for system updates
         run: |
           sudo apt-get update
           sudo apt-get dist-upgrade
       - name: Install Qt5 and build essentials
         run: |
-          sudo apt-get install build-essential qt5-default wget python3-pip python3-setuptools
-          sudo apt-get -t xenial-backports install ninja-build
-          # stupid old ubuntu has waay to old meson, so install it using pip
-          # but dont install newest, because it requires python >= 3.6 while xenial only has 3.5
-          sudo pip3 install 'meson~=0.56.2'
+          sudo apt-get install build-essential qt5-default wget cmake ninja-build
       - name: Download linuxdeploy
         run: |
           wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
@@ -103,7 +105,13 @@ jobs:
 
       - name: Configure build
         run: |
-          meson builddir --buildtype release -Dprefix=/usr
+          cmake \
+            -G Ninja \
+            -D CMAKE_BUILD_TYPE=Release \
+            -D CMAKE_INSTALL_PREFIX=/usr \
+            -D QT_MAJOR_VERSION=${{ matrix.qt_version.major }} \
+            -B builddir \
+            .
 
       - name: Compile
         run: ninja -C builddir
@@ -134,7 +142,7 @@ jobs:
     env:
       QT_MAJOR_VERSION: 6
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Prepare Cross Complie environment
         run: ./.github/workflows/scripts/prepare-cross-env.sh
@@ -142,10 +150,10 @@ jobs:
       - name: Configure build
         run: |
           x86_64-w64-mingw32-cmake \
-            -GNinja \
-            -DCMAKE_BUILD_TYPE=Release
-            -DBUILD_STATIC=ON \
-            -DQT_MAJOR_VERSION=6 \
+            -G Ninja \
+            -D CMAKE_BUILD_TYPE=Release
+            -D BUILD_STATIC=ON \
+            -D QT_MAJOR_VERSION=6 \
             -B builddir .
       - name: Compile
         run: ninja -C builddir
@@ -171,11 +179,11 @@ jobs:
 
     steps:
       - name: Download AppImage artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: appimages
       - name: Download AppImage artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: windows-static
 
