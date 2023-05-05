@@ -55,6 +55,10 @@ if (DEBUG)
   set(CMAKE_WIN32_EXECUTABLE OFF)
   # when developing we dont want warnings
   add_definitions(-Werror)
+else(DEBUG)
+  if(WIN32)
+    set(CMAKE_WIN32_EXECUTABLE ON)
+  endif()
 endif(DEBUG)
 
 configure_file(src/config.hpp.in config.hpp @ONLY)
@@ -137,6 +141,31 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   include(CTest)
 endif()
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
+  # find_package(Catch2)
+  #
+  # if (NOT Catch2_FOUND)
+  #   if(EXISTS subprojects/Catch2/CMakeLists.txt)
+  #     add_subdirectory(subprojects/Catch2)
+  #     set(Catch2_FOUND ON)
+  #   endif()
+  # endif()
+  #
+  # if (Catch2_FOUND)
+  #   include(Catch)
+  #   add_executable(tests tests/test.cpp)
+  #   target_include_directories(tests PRIVATE "${PROJECT_SOURCE_DIR}/src")
+  #   target_link_libraries(tests PRIVATE
+  #     Catch2::Catch2
+  #     Qt${QT_MAJOR_VERSION}::Core
+  #   )
+  #   if (${QT_MAJOR_VERSION} STREQUAL 6)
+  #     target_link_libraries(tests PRIVATE Qt${QT_MAJOR_VERSION}::Core5Compat)
+  #   endif()
+  #   catch_discover_tests(tests)
+  # else()
+  #   error("Need Catch2 for tests. Install catch2 system package or clone the git submodule at subprojects/Catch2 (git submodule update --init)")
+  # endif()
+
   if(NOT WIN32)
     find_program(DESKTOP_FILE_VALIDATE NAMES desktop-file-validate)
     if(DESKTOP_FILE_VALIDATE)
