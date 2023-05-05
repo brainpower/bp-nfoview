@@ -14,9 +14,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(QT_MAJOR_VERSION 5 CACHE STRING "Qt Version to build with")
 
-option(ENABLE_TESTS "Build tests" ON)
 option(BUILD_STATIC "Use static libraries" OFF)
 option(DEBUG "Build in debug mode..." OFF)
+
+include(GNUInstallDirs)
+
 
 if (${QT_MAJOR_VERSION} STREQUAL 6)
   set(MAYBE_COMPAT Core5Compat)
@@ -72,6 +74,13 @@ configure_file(src/config.hpp.in config.hpp @ONLY)
 
 
 add_executable(${PROJECT_NAME})
+
+if (QT_MAJOR_VERSION STREQUAL 6)
+  target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
+else()
+  target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_14)
+endif()
+
 target_sources(${PROJECT_NAME} PRIVATE
   src/AboutDialog.cpp
   src/BPNVMainWindow.cpp
@@ -106,12 +115,14 @@ if (BUILD_STATIC)
   )
 endif()
 
-include(GNUInstallDirs)
 
-install(
-  PROGRAMS data/bp-nfoview.desktop
-  DESTINATION ${CMAKE_INSTALL_DATADIR}/applications
-)
+if (NOT WIN32)
+  install(
+    PROGRAMS data/bp-nfoview.desktop
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/applications
+  )
+endif()
+
 install(
   PROGRAMS data/bp-nfoview.png
   DESTINATION ${CMAKE_INSTALL_DATADIR}/pixmaps
@@ -122,5 +133,17 @@ install(
 )
 
 # if tests enabled, go build them
-IF(ENABLE_TESTS)
-ENDIF(ENABLE_TESTS)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+  include(CTest)
+endif()
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
+  if(NOT WIN32)
+    find_program(DESKTOP_FILE_VALIDATE NAMES desktop-file-validate)
+    if(DESKTOP_FILE_VALIDATE)
+      add_test(
+        NAME "validate-desktop-file"
+        COMMAND "${DESKTOP_FILE_VALIDATE}" "${PROJECT_SOURCE_DIR}/data/bp-nfoview.desktop"
+      )
+    endif()
+  endif()
+endif()
