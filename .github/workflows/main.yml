@@ -67,7 +67,7 @@ jobs:
             clang \
             desktop-file-utils
       - name: QMake Info
-        run: qtchooser -install qt${{ matrix.qt_version.major }} /usr/lib/qt${{ matrix.qt_version.major }}/bin/qmake); qmake -query || true
+        run: qtchooser -install qt${{ matrix.qt_version.major }} /usr/lib/qt${{ matrix.qt_version.major }}/bin/qmake; qmake -query || true
       - name: Configure build
         run: |
           cmake \
