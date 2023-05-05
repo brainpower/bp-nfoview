@@ -172,14 +172,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v3
+
       - name: Download AppImage artifact
         uses: actions/download-artifact@v3
         with:
           name: appimages
-      - name: Download AppImage artifact
+      - name: Download Windows Static EXE artifact
         uses: actions/download-artifact@v3
         with:
           name: windows-static
+
+      - name: Display structure of downloaded files
+        run: ls -R
 
       - name: Create release draft
         env:
@@ -189,8 +194,10 @@ jobs:
           # Cut off the "refs/tags" prefix.
           tag="${tag#"refs/tags/"}"
           version="${tag#refs/tags/v}"
+          git tag -l --format=$'%(contents:subject)\n\n%(contents:body)' > release-msg.txt
           hub release create \
             --draft \
             --attach "bp-nfoview-${version}-x86_64.AppImage" \
             --attach "bp-nfoview-${version}-x86_64.exe" \
+            --file "release-msg.txt" \
             "${tag}"
