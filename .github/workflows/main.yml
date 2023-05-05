@@ -142,7 +142,7 @@ jobs:
 
       - name: Configure build
         run: |
-          x86_64-w64-mingw32-cmake \
+          x86_64-w64-mingw32-cmake-static \
             -G Ninja \
             -D CMAKE_BUILD_TYPE=Release \
             -D BUILD_STATIC=ON \

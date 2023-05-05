@@ -9,8 +9,6 @@ set(MAIN_CPYRGT_YEAR "2010 - 2023")
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(QT_MAJOR_VERSION 5 CACHE STRING "Qt Version to build with")
 
@@ -22,6 +20,21 @@ include(GNUInstallDirs)
 
 if (${QT_MAJOR_VERSION} STREQUAL 6)
   set(MAYBE_COMPAT Core5Compat)
+  set(CMAKE_CXX_STANDARD 17)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
+else()
+  set(CMAKE_CXX_STANDARD 14)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
+endif()
+
+
+if (BUILD_STATIC)
+  set(STATIC_BUILD ON) # for config.hpp
+
+  #set(CMAKE_FIND_LIBRARY_SUFFIXES_OVERRIDE ".a;.lib")
+  set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.lib")
+
+  set(USE_STATIC_QT_BY_DEFAULT ON)
 endif()
 
 find_package(Qt${QT_MAJOR_VERSION} 5.10 CONFIG REQUIRED COMPONENTS
@@ -43,32 +56,6 @@ if (DEBUG)
   # when developing we dont want warnings
   add_definitions(-Werror)
 endif(DEBUG)
-
-
-if (BUILD_STATIC)
-  set(STATIC_BUILD ON FORCE)
-  set(BUILD_SHARED_LIBS OFF FORCE)
-  set(Qt${QT_MAJOR_VERSION}_USE_STATIC_LIBS ON)
-  set(Qt${QT_MAJOR_VERSION}_USE_STATIC_RUNTIME ON)
-  set(USE_STATIC_QT_BY_DEFAULT ON)
-  # https://github.com/Martchus/PKGBUILDs/blob/master/cmake/mingw-w64-static/toolchain-mingw-static.cmake
-  set(CMAKE_FIND_LIBRARY_SUFFIXES_OVERRIDE ".a;.lib")
-  set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.lib")
-  set(CMAKE_EXE_LINKER_FLAGS "$ENV{LDFLAGS} -static -static-libgcc -static-libstdc++" CACHE STRING "linker flags for static builds" FORCE)
-  set(CMAKE_FIND_ROOT_PATH "/usr/x86_64-w64-mingw32/static;${CMAKE_FIND_ROOT_PATH}")
-  set(Vulkan_LIBRARY "/usr/x86_64-w64-mingw32/lib/libvulkan.dll.a" CACHE FILEPATH "shared Vulkan IDC library")
-  # workaround limitations in upstream pkg-config files and CMake find modules
-  set(pkgcfg_lib_libbrotlicommon_brotlicommon "/usr/x86_64-w64-mingw32/lib/libbrotlicommon-static.a" CACHE INTERNAL "static libbrotlicommon")
-  set(pkgcfg_lib_libbrotlienc_brotlienc "/usr/x86_64-w64-mingw32/lib/libbrotlienc-static.a;/usr/x86_64-w64-mingw32/lib/libbrotlicommon-static.a" CACHE INTERNAL "static libbrotliend")
-  set(pkgcfg_lib_libbrotlidec_brotlidec "/usr/x86_64-w64-mingw32/lib/libbrotlidec-static.a;/usr/x86_64-w64-mingw32/lib/libbrotlicommon-static.a" CACHE INTERNAL "static libbrotlidec")
-  set(libbrotlicommon_STATIC_LDFLAGS "${pkgcfg_lib_libbrotlicommon_brotlicommon}" CACHE INTERNAL "static libbrotlicommon")
-  set(libbrotlienc_STATIC_LDFLAGS "${pkgcfg_lib_libbrotlienc_brotlienc}" CACHE INTERNAL "static libbrotliend")
-  set(libbrotlidec_STATIC_LDFLAGS "${pkgcfg_lib_libbrotlidec_brotlidec}" CACHE INTERNAL "static libbrotlidec")
-  set(FREETYPE_DEPENDENCIES "-lgraphite2;-lbz2;-lharfbuzz;-lfreetype;-lbrotlidec-static;-lbrotlicommon-static" CACHE INTERNAL "dependencies of static FreeType2 library")
-  set(OPENSSL_USE_STATIC_LIBS ON)
-  set(OPENSSL_DEPENDENCIES "-lws2_32;-lgdi32;-lcrypt32" CACHE INTERNAL "dependencies of static OpenSSL libraries")
-  set(libwebp_DEPENDENCIES "-lsharpyuv" CACHE INTERNAL "deps of webp")
-endif()
 
 configure_file(src/config.hpp.in config.hpp @ONLY)
 
@@ -100,10 +87,23 @@ if (BUILD_STATIC)
   # fix webp thing not picking up it's dependencies correctly'
   target_link_libraries(${PROJECT_NAME} ${PC_WebP_STATIC_LIBRARIES})
 
-  #target_sources(${PROJECT_NAME} PRIVATE src/qt_plugins_static.cpp)
+  if (${QT_MAJOR_VERSION} STREQUAL 5)
+    add_definitions( -DQT_STATICPLUGIN )
+    target_link_libraries(${PROJECT_NAME}
+      Qt${QT_MAJOR_VERSION}::QWindowsIntegrationPlugin
+      Qt${QT_MAJOR_VERSION}::QWindowsVistaStylePlugin
+      Qt${QT_MAJOR_VERSION}::QSvgIconPlugin
+      Qt${QT_MAJOR_VERSION}::QGifPlugin
+      Qt${QT_MAJOR_VERSION}::QJpegPlugin
+      Qt${QT_MAJOR_VERSION}::QWebpPlugin
+    )
+    target_sources(${PROJECT_NAME} PRIVATE src/qt_plugins_static.cpp)
+  endif()
+
   qt_import_plugins(${PROJECT_NAME}
     INCLUDE
       Qt${QT_MAJOR_VERSION}::QWindowsIntegrationPlugin
+      Qt${QT_MAJOR_VERSION}::QWindowsVistaStylePlugin
       Qt${QT_MAJOR_VERSION}::QSvgIconPlugin
     INCLUDE_BY_TYPE imageformats
       Qt${QT_MAJOR_VERSION}::QGifPlugin

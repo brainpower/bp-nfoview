@@ -23,15 +23,14 @@ pacman -Sy
 
 # Install core MingW packages
 pacman -S --noconfirm \
-  pev `# for peldd ` \
   mingw-w64-binutils \
   mingw-w64-crt \
   mingw-w64-gcc \
   mingw-w64-configure \
   mingw-w64-headers \
   mingw-w64-winpthreads \
-  mingw-w64-meson \
   mingw-w64-cmake \
+  mingw-w64-cmake-static \
   mingw-w64-extra-cmake-modules \
   mingw-w64-fontconfig \
   mingw-w64-freeglut \
@@ -44,8 +43,12 @@ pacman -S --noconfirm \
 
 # Install MingW Qt5 packages
 pacman -S --noconfirm \
+  qt"${QTV}"-base \
   mingw-w64-qt"${QTV}"-base-static \
   mingw-w64-qt"${QTV}"-imageformats-static \
   mingw-w64-qt"${QTV}"-svg-static \
   mingw-w64-qt"${QTV}"-tools-static
 
+if [[ "$QTV" == "6" ]]; then
+  pacman -S --noconfirm mingw-w64-qt"${QTV}"-5compat-static
+fi
