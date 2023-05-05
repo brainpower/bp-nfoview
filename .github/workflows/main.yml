@@ -1,8 +1,5 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
 
-# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
@@ -15,11 +12,8 @@ on:
   workflow_dispatch:
 
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     strategy:
@@ -38,7 +32,6 @@ jobs:
           - name: Qt6
             major: 6
             packages: "qt6-base-dev qt6-base-dev-tools libqt6svg6-dev libqt6core5compat6-dev qmake6"
-            #packages: "qt6-base-dev qt6-svg-dev qt6-5compat-dev"
 
     name: "Build and test using ${{ matrix.compiler.name }} - Qt${{ matrix.qt_version.major }}"
     env:
@@ -47,7 +40,6 @@ jobs:
       QT_MAJOR_VERSION: ${{ matrix.qt_version.major }}
       QT_SELECT: qt${{ matrix.qt_version.major }}
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
@@ -64,10 +56,12 @@ jobs:
             build-essential \
             ${{ matrix.qt_version.packages }} \
             cmake \
+            ninja-build \
             clang \
-            desktop-file-utils
+            desktop-file-utils \
+            libgl1-mesa-dev libegl1-mesa-dev
       - name: QMake Info
-        run: qtchooser -install qt${{ matrix.qt_version.major }} /usr/lib/qt${{ matrix.qt_version.major }}/bin/qmake; qmake -query || true
+        run: /usr/lib/qt${{ matrix.qt_version.major }}/bin/qmake -query || true
       - name: Configure build
         run: |
           cmake \
@@ -87,7 +81,8 @@ jobs:
     if: startsWith( github.ref, 'refs/tags/' )
     needs:
       - build # only try this if basic build succeeds
-    runs-on: ubuntu-20.04 # use the oldest to create the appimage, to make sure it runs almost everywhere
+    # use the oldest supported to create the appimage, to make sure it runs almost everywhere
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
       - name: Check for system updates
@@ -96,7 +91,7 @@ jobs:
           sudo apt-get dist-upgrade
       - name: Install Qt5 and build essentials
         run: |
-          sudo apt-get install build-essential qt5-default wget cmake ninja-build
+          sudo apt-get install build-essential qt5-default wget cmake ninja-build libgl1-mesa-dev libegl1-mesa-dev
       - name: Download linuxdeploy
         run: |
           wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
@@ -109,7 +104,7 @@ jobs:
             -G Ninja \
             -D CMAKE_BUILD_TYPE=Release \
             -D CMAKE_INSTALL_PREFIX=/usr \
-            -D QT_MAJOR_VERSION=${{ matrix.qt_version.major }} \
+            -D QT_MAJOR_VERSION=5 \
             -B builddir \
             .
 
@@ -139,8 +134,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: archlinux
-    env:
-      QT_MAJOR_VERSION: 6
     steps:
       - uses: actions/checkout@v3
 
@@ -151,10 +144,11 @@ jobs:
         run: |
           x86_64-w64-mingw32-cmake \
             -G Ninja \
-            -D CMAKE_BUILD_TYPE=Release
+            -D CMAKE_BUILD_TYPE=Release \
             -D BUILD_STATIC=ON \
             -D QT_MAJOR_VERSION=6 \
-            -B builddir .
+            -B builddir \
+            -S .
       - name: Compile
         run: ninja -C builddir
 
