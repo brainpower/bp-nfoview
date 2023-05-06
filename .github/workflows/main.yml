@@ -183,9 +183,6 @@ jobs:
         with:
           name: windows-static
 
-      - name: Display structure of downloaded files
-        run: ls -R
-
       - name: Create release draft
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
