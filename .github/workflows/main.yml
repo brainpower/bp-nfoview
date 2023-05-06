@@ -116,7 +116,7 @@ jobs:
 
       - name: Create AppImage
         run: |
-          VERSION=$(echo "${{ github.ref }}" | sed -r 's@.*/([^/]+)$@\1@')
+          VERSION=$(echo "${{ github.ref }}" | sed -r 's@.*/v?([^/]+)$@\1@')
           export VERSION
           ./linuxdeploy-x86_64.AppImage --appdir AppDir/ --plugin qt --output appimage
 
@@ -154,7 +154,7 @@ jobs:
 
       - name: Add version and architecture to filename
         run: |
-          version=$(echo "${{ github.ref }}" | sed -r 's@.*/([^/]+)$@\1@')
+          version=$(echo "${{ github.ref }}" | sed -r 's@.*/v?([^/]+)$@\1@')
           mv -v builddir/bp-nfoview.exe "bp-nfoview-${version}-x86_64.exe"
 
       - name: Upload Windows Executable artifacts
@@ -193,7 +193,7 @@ jobs:
           tag="${{ github.ref }}"
           # Cut off the "refs/tags" prefix.
           tag="${tag#"refs/tags/"}"
-          version="${tag#refs/tags/v}"
+          version="${tag#v}"
           git tag -l --format=$'%(contents:subject)\n\n%(contents:body)' > release-msg.txt
           hub release create \
             --draft \
