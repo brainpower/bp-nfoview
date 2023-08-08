@@ -1,6 +1,6 @@
+// SPDX-FileCopyrightText: 2010 - 2023 brainpower <brainpower@mailbox.org>
+//
 // SPDX-License-Identifier: GPL-2.0-or-later
-// Copyright (c) 2010-2023  brainpower <brainpower@mailbox.org>
-
 
 #ifndef BP_NFOVIEW_BPNVMAINWINDOW_HPP
 #define BP_NFOVIEW_BPNVMAINWINDOW_HPP

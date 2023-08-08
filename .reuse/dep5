@@ -1,0 +1,26 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: bp-nfoview
+Upstream-Contact: brainpower <brainpower@mailbox.org>
+Source: https://github.com/brainpower/bp-nfoview
+
+# Sample paragraph, commented out:
+#
+# Files: src/*
+# Copyright: $YEAR $NAME <$CONTACT>
+# License: ...
+
+Files: data/*
+Copyright: 2010 - 2021 brainpower <brainpower@mailbox.org>
+License: CC-BY-SA-4.0
+
+Files: debian/* arch/PKGBUILD
+Copyright: 2010 - 2023 brainpower <brainpower@mailbox.org>
+License: MIT
+
+Files: README.md TODO
+Copyright: 2010 - 2023 brainpower <brainpower@mailbox.org>
+License: MIT
+
+Files: .gitignore .gitmodules
+Copyright: 2010 - 2023 brainpower <brainpower@mailbox.org>
+License: CC0-1.0

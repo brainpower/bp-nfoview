@@ -1,5 +1,6 @@
+// SPDX-FileCopyrightText: 2010 - 2023 brainpower <brainpower@mailbox.org>
+//
 // SPDX-License-Identifier: GPL-2.0-or-later
-// Copyright (c) 2010-2023  brainpower <brainpower@mailbox.org>
 
 /* This Code may resemble some other code,
  * cause I got the idea out of some example file

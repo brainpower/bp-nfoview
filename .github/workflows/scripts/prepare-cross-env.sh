@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# SPDX-FileCopyrightText: 2023 brainpower <brainpower@mailbox.org>
+#
+# SPDX-License-Identifier: MIT
+
 QTV=${QT_MAJOR_VERSION:-6}
 
 # basic preparations

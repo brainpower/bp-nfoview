@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021 - 2023 brainpower <brainpower@mailbox.org>
+#
+# SPDX-License-Identifier: MIT
+
 name: CI
 
 on:

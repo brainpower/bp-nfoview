@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2021 brainpower <brainpower@mailbox.org>
+//
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 #include "config.hpp"
 
 #ifdef STATIC_BUILD

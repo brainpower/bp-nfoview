@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2018 - 2023 brainpower <brainpower@mailbox.org>
+#
+# SPDX-License-Identifier: MIT
 
 project(
   'bp-nfoview',
