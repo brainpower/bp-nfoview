@@ -27,7 +27,6 @@ else()
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
 endif()
 
-
 if (BUILD_STATIC)
   set(STATIC_BUILD ON) # for config.hpp
 
@@ -49,7 +48,6 @@ add_definitions(-DQT_NO_FOREACH)
 #add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050d00)
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050f02)
 
-
 if (DEBUG)
   # when debugging we want to see stdout on win32
   set(CMAKE_WIN32_EXECUTABLE OFF)
@@ -62,7 +60,6 @@ else(DEBUG)
 endif(DEBUG)
 
 configure_file(src/config.hpp.in config.hpp @ONLY)
-
 
 add_executable(${PROJECT_NAME})
 
@@ -119,7 +116,6 @@ if (BUILD_STATIC)
   )
 endif()
 
-
 if (NOT WIN32)
   install(
     PROGRAMS data/bp-nfoview.desktop
@@ -128,12 +124,11 @@ if (NOT WIN32)
 endif()
 
 install(
-  PROGRAMS data/bp-nfoview.png
+  FILES data/bp-nfoview.png
   DESTINATION ${CMAKE_INSTALL_DATADIR}/pixmaps
 )
 install(
   TARGETS ${PROJECT_NAME}
-  DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
 # if tests enabled, go build them
@@ -163,7 +158,8 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
   #   endif()
   #   catch_discover_tests(tests)
   # else()
-  #   error("Need Catch2 for tests. Install catch2 system package or clone the git submodule at subprojects/Catch2 (git submodule update --init)")
+  #   error("Need Catch2 for tests. Install catch2 system package"
+  #         " or clone the git submodule at subprojects/Catch2 (git submodule update --init)")
   # endif()
 
   if(NOT WIN32)
@@ -175,4 +171,49 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
       )
     endif()
   endif()
+endif()
+
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+
+  set(CPACK_PACKAGE_CONTACT "brainpower <brainpower@mailbox.org>")
+  set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
+    "A Simple NFO-Viewer by brainpower
+bp-nfoview is a simple viewer for NFO files, which are \"ASCII\" art in
+the CP437 codepage. The advantages of using NFO Viewer instead of a
+text editor are preset font, color and encoding settings."
+  )
+  # debian
+  set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+  # fallback
+  if(NO_SHLIBDEPS)
+    if (QT_MAJOR_VERSION STREQUAL 6)
+      set(CPACK_DEBIAN_PACKAGE_DEPENDS
+        "libc6, libgcc-s1, libqt6core5compat6, libqt6core6, libqt6gui6, libqt6widgets6, libstdc++6"
+      )
+    else()
+      set(CPACK_DEBIAN_PACKAGE_DEPENDS
+        "libc6, libgcc-s1, libqt5core5a, libqt5gui5, libqt5widgets5, libstdc++6"
+      )
+    endif()
+  endif()
+  set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
+  set(CPACK_DEBIAN_PACKAGE_PRIORITY "extra")
+
+  set(CPACK_BINARY_STGZ OFF)
+  set(CPACK_BINARY_TGZ OFF)
+  set(CPACK_BINARY_TZ OFF)
+  if(WIN32)
+    if(PACKAGE_ALL)
+      set(CPACK_BINARY_NSIS ON)
+      set(CPACK_BINARY_ZIP ON)
+    endif()
+  else()
+    if(PACKAGE_ALL)
+      set(CPACK_BINARY_STGZ ON)
+      set(CPACK_BINARY_TGZ ON)
+      set(CPACK_BINARY_DEB ON)
+      set(CPACK_BINARY_RPM ON)
+    endif()
+  endif()
+  include(CPack)
 endif()

@@ -11,56 +11,66 @@ A Simple NFO-Viewer
 There is a package in the AUR for this: [bp-nfoview](https://aur.archlinux.org/packages/bp-nfoview).
 You can use your favourite AUR-Helper to install it. For example:
 
-    pacaur -S bp-nfoview
+```bash
+pacaur -S bp-nfoview
+```
 
 You can also use the PKGBUILD in arch/ to create a package from git master.
 
+### CPack
+
+You can use CPack to generate a package for your systems package manager,
+if it uses either a dpkg or rpm based package manager.
+
+#### Debian based (Debian, Ubuntu, Mint, ...)
+
+```bash
+mkdir build
+cmake -GNinja -B build . -DCPACK_BINARY_DEB=ON
+ninja -C build package
+```
+
+#### RPM based (openSUSE, Fedora, ...)
+
+```bash
+mkdir build
+cmake -GNinja -B build . -DCPACK_BINARY_RPM=ON
+ninja -C build package
+```
+
 ### Others
 
-... will have to compile from source.
-
-#### Using dpkg on debian based systems
-
-However, for dpkg based distributions you can use
-the included files in the debian/ folder to create
-a .deb package.
-First update the version in the changelog using your favorite editor:
-
-    vim debian/changelog
-
-Then run:
-
-    dpkg-buildpackage
-
+... will have to compile "manually".
 
 #### Using CMake
 
 So, to compile this app, make sure you installed the Qt SDK,
-then just run
+then just run for example:
 
-    mkdir build
-    cd build
-    cmake ..
-    make
+```bash
+mkdir build
+cmake -GNinja -B build .
+ninja -C build
+```
 
 To install it then, run (may need root permissions)
 
-    make install
+```bash
+ninja -C build install
+```
 
 #### Using meson
 
-Building against Qt4 is not supported with my meson.build, use CMake if you need that.
+meson build support is considered experimental, CMake is the fully supported build solution.
+Expect trouble, expecially when cross compiling.
+If you have trouble with meson, try cmake.
 
-To build, run:
+To build and install, run for example:
 
-    meson builddir
-    cd builddir
-    ninja
-    ninja install
+```bash
+meson build
+ninja -C build
+ninja -C build install
+```
 
 You may need root permissions for the install step.
-
-
-
-Also, feel free to contact me
-if you found bugs or you want to make a feature suggestion, I'll try my best then ;)
