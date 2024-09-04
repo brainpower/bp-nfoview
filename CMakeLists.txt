@@ -177,12 +177,23 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   set(CPACK_PACKAGE_CONTACT "brainpower <brainpower@mailbox.org>")
   set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
     "A Simple NFO-Viewer by brainpower
-bp-nfoview is a simple viewer for NFO files, which are \"ASCII\" art in
+bp-nfoview is a simple viewer for NFO files, of which most are ASCII art in
 the CP437 codepage. The advantages of using NFO Viewer instead of a
 text editor are preset font, color and encoding settings."
   )
+
+  # rpm
+  #   it does not like the multi-line description
+  set(CPACK_RPM_PACKAGE_SUMMARY "A Simple NFO-Viewer by brainpower")
+  set(CPACK_RPM_PACKAGE_DESCRIPTION "${CPACK_PACKAGE_DESCRIPTION_SUMMARY}")
+  set(CPACK_RPM_FILE_NAME "RPM-DEFAULT")
+  #set(CPACK_RPM_PACKAGE_LICENSE "GPL-2.0-or-later")
+
   # debian
   set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+  set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
+  set(CPACK_DEBIAN_PACKAGE_PRIORITY "extra")
+  set(CPACK_DEBIAN_FILE_NAME "DEB-DEFAULT")
   # fallback
   if(NO_SHLIBDEPS)
     if (QT_MAJOR_VERSION STREQUAL 6)
@@ -195,8 +206,6 @@ text editor are preset font, color and encoding settings."
       )
     endif()
   endif()
-  set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
-  set(CPACK_DEBIAN_PACKAGE_PRIORITY "extra")
 
   set(CPACK_BINARY_STGZ OFF)
   set(CPACK_BINARY_TGZ OFF)
