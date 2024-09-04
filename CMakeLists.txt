@@ -1,22 +1,21 @@
-# SPDX-FileCopyrightText: 2013-2023 brainpower <brainpower@mailbox.org>
+# SPDX-FileCopyrightText: 2013-2024 brainpower <brainpower@mailbox.org>
 # SPDX-License-Identifier: GPL-2.0-or-later OR MIT
 
 cmake_minimum_required(VERSION 3.16)
 
 project(bp-nfoview VERSION 0.3.1 LANGUAGES CXX)
-set(MAIN_CPYRGT_YEAR "2010 - 2023")
+set(MAIN_CPYRGT_YEAR "2010 - 2024")
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(QT_MAJOR_VERSION 5 CACHE STRING "Qt Version to build with")
+set(QT_MAJOR_VERSION 6 CACHE STRING "Qt Version to build with")
 
 option(BUILD_STATIC "Use static libraries" OFF)
 option(DEBUG "Build in debug mode..." OFF)
 
 include(GNUInstallDirs)
-
 
 if (${QT_MAJOR_VERSION} STREQUAL 6)
   set(MAYBE_COMPAT Core5Compat)
