@@ -98,12 +98,13 @@ BPNVMainWindow::loadFile(QString file) {
 
 void
 BPNVMainWindow::updateTextBrowser() {
+  static QRegularExpression linkRE(
+    QStringLiteral(R"x(([^"])((http|https)://([^()"'<>\s]*))([^"]))x")
+  );
   // qDebug("updateTextBrowser()");
   if (rawFileData) {
     // qDebug("updateTextBrowser(): if rawFileData");
 
-    QRegularExpression linkRE(
-      QStringLiteral(R"x(([^"])((http|https)://([^()"'<>\s]*))([^"]))x"));
     QString text;
 
     if (isCP437) {
@@ -142,8 +143,8 @@ BPNVMainWindow::updateTextBrowser() {
                .replace(
                  QStringLiteral("\n"), QStringLiteral("<br>\n"))  // add HTML linebreaks
                .replace(
-                 linkRE, QStringLiteral(
-                           R"(\1<a href="\2">\2</a>\5)"))  // add a-Tags around urls
+                 linkRE, QStringLiteral(R"(\1<a href="\2">\2</a>\5)")
+               )  // add a-Tags around urls
              // TODO this is pretty dump url detection, maybe there are better ways to
              // do this?
              )
@@ -206,7 +207,7 @@ BPNVMainWindow::onActionStatusBar(bool checked) {
 void
 BPNVMainWindow::onActionOpen() {
   auto recent =
-    settings->value(QStringLiteral("GUI/recentDir"), QStringLiteral("")).toString();
+    settings->value(QStringLiteral("GUI/recentDir"), QLatin1String("")).toString();
   auto file = QFileDialog::getOpenFileName(
     this,
     QStringLiteral("Open .nfo file..."),  // title
@@ -223,10 +224,15 @@ BPNVMainWindow::onActionOpen() {
 void
 BPNVMainWindow::onActionSaveImage() {
   auto recent =
-    settings->value(QStringLiteral("GUI/recentDir"), QStringLiteral("")).toString();
+    settings->value(QStringLiteral("GUI/recentDir"), QLatin1String("")).toString();
   auto file = QFileDialog::getSaveFileName(
     this, QStringLiteral("Save to..."), recent,
-    QStringLiteral("Images (*.jpg *.jpeg *.png *.tiff *.bmp *.xpm *.ppm *.xbm)"));
+    QStringLiteral(
+      "PNG (*.png);;JPEG (*.jpg *.jpeg);;"
+      "TIFF (*.tiff);;Windows Bitmap (*.bmp);;"
+      "XPM (*.xpm);;PPM (*.ppm);;XBM (*.xbm)"
+    )
+  );
   if (!file.isEmpty()) {
     settings->setValue(
       QStringLiteral("GUI/recentDir"), QFileInfo(file).absoluteDir().absolutePath());
