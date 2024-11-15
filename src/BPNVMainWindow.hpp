@@ -20,6 +20,8 @@ class QActionGroup;
 class QMenu;
 class QMenuBar;
 class QStatusBar;
+class QToolBar;
+class QLineEdit;
 
 class BPNVMainWindow : public QMainWindow {
   Q_OBJECT
@@ -29,7 +31,10 @@ public:
   explicit BPNVMainWindow(QStringList list);
   ~BPNVMainWindow() override;
 
-public slots:
+  QSize sizeHint() const override;
+  void closeEvent(QCloseEvent *event) override;
+
+public Q_SLOTS:
   bool loadFile(QString file);
   bool loadFile(QUrl file);
   void saveAsImage(QString qString);
@@ -46,11 +51,12 @@ public slots:
   void onActionLineHeight();
   void onActionAbout();
   void onActionQuit();
+  void onFindNext();
+  void onFindPrev();
 
-  QSize sizeHint() const override;
-  void closeEvent(QCloseEvent *event) override;
 
 protected:
+  void keyPressEvent(QKeyEvent *e) override;
   void dragEnterEvent(QDragEnterEvent *e) override;
   void dropEvent(QDropEvent *e) override;
 
@@ -73,6 +79,8 @@ private:
   QMenuBar *menubar;
   QMenu *menuFile, *menuView, *menuViewCodec, *menuHelp;
   QStatusBar *statusbar;
+  QToolBar *findBar;
+  QLineEdit* findLineEdit;
 
   QFont defaultFont;
   QFont currentFont;

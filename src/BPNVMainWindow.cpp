@@ -28,9 +28,11 @@
 // widgets
 #include <QAction>
 #include <QActionGroup>
+#include <QLineEdit>
 #include <QMenu>
 #include <QMenuBar>
 #include <QStatusBar>
+#include <QToolBar>
 #include <QTextBrowser>
 
 // dialogs
@@ -343,6 +345,21 @@ BPNVMainWindow::onActionQuit() {
 }
 
 void
+BPNVMainWindow::keyPressEvent(QKeyEvent *e) {
+  if ((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_F) {
+    findBar->show();
+    findLineEdit->setFocus();
+    auto cursor = textBrowser->textCursor();
+    if (cursor.hasSelection()) {
+      auto selection = cursor.selectedText();
+      if (!selection.isEmpty()) {
+        findLineEdit->setText(selection);
+      }
+    }
+  }
+}
+
+void
 BPNVMainWindow::dragEnterEvent(QDragEnterEvent *e) {
   auto data = e->mimeData();
 
@@ -387,6 +404,17 @@ BPNVMainWindow::dropEvent(QDropEvent *e) {
   qDebug() << " data:" << e->mimeData();
 }
 
+void
+BPNVMainWindow::onFindNext() {
+  // TODO: buttons or checkboxes for FindFlags
+  textBrowser->find(findLineEdit->text());
+}
+
+void
+BPNVMainWindow::onFindPrev() {
+  // TODO: buttons or checkboxes for FindFlags
+  textBrowser->find(findLineEdit->text(), QTextDocument::FindBackward);
+}
 
 void
 BPNVMainWindow::setupUi() {
@@ -428,6 +456,7 @@ BPNVMainWindow::setupUi() {
 
   // StatusBar
   statusbar = new QStatusBar(this);
+  findBar = new QToolBar(this);
 
   // Actions
   actionOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
@@ -520,10 +549,39 @@ BPNVMainWindow::setupUi() {
   setStatusBar(statusbar);
   setCentralWidget(textBrowser);
 
+  // findBar->setAllowedAreas(Qt::BottomToolBarArea);
+  findBar->setMovable(false);
+
+  findLineEdit = new QLineEdit(findBar);
+
+  QAction* findBarClose = new QAction(findBar);
+  findBarClose->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::WindowClose));
+  QAction* findBarNext = new QAction(findBar);
+  findBarNext->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::GoDown));
+  QAction* findBarPrev = new QAction(findBar);
+  findBarPrev->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::GoUp));
+
+  QWidget* stretcher = new QWidget();
+  stretcher->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
+
+  findBar->addWidget(findLineEdit);
+  findBar->addAction(findBarNext);
+  findBar->addAction(findBarPrev);
+  // TODO: regex button
+  findBar->addWidget(stretcher);
+  findBar->addAction(findBarClose);
+
+  addToolBar(Qt::BottomToolBarArea, findBar);
+
   // statusbar->setBackgroundRole(QPalette::Highlight);
   // statusbar->setAutoFillBackground(true);
 
   // connects
+
+  connect(findBarClose, &QAction::triggered, findBar, &QWidget::hide);
+  connect(findBarNext, &QAction::triggered, this, &BPNVMainWindow::onFindNext);
+  connect(findBarPrev, &QAction::triggered, this, &BPNVMainWindow::onFindPrev);
+
   connect(actionOpen, SIGNAL(triggered()), this, SLOT(onActionOpen()));
   connect(actionSaveImage, SIGNAL(triggered()), this, SLOT(onActionSaveImage()));
   connect(actionQuit, SIGNAL(triggered()), this, SLOT(onActionQuit()));
@@ -548,4 +606,7 @@ BPNVMainWindow::setupUi() {
   bool statusBarEnabled = settings->value(QStringLiteral("statusbar"), true).toBool();
   actionStatusBar->setChecked(statusBarEnabled);
   onActionStatusBar(statusBarEnabled);
+
+  // always hidden by default
+  findBar->hide();
 }
