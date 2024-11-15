@@ -16,10 +16,16 @@ pacman-key --populate
 # some basic utils
 pacman -S --noconfirm --needed make ninja git cmake binutils patch base-devel unzip python rsync zip
 
+#echo "[ownstuff]" >> /etc/pacman.conf && \
+#echo "Server = https://ftp.f3l.de/~martchus/\$repo/os/\$arch " >> /etc/pacman.conf && \
+#echo "Server = https://martchus.no-ip.biz/repo/arch/\$repo/os/\$arch " >> /etc/pacman.conf && \
+
 # mingw builds
-echo "[ownstuff]" >> /etc/pacman.conf && \
-echo "Server = https://ftp.f3l.de/~martchus/\$repo/os/\$arch " >> /etc/pacman.conf && \
-echo "Server = https://martchus.no-ip.biz/repo/arch/\$repo/os/\$arch " >> /etc/pacman.conf && \
+sed -i "s@[extra]@[ownstuff]
+Server = https://ftp.f3l.de/~martchus/\$repo/os/\$arch
+Server = https://martchus.no-ip.biz/repo/arch/\$repo/os/\$arch
+
+[extra]@" /etc/pacman.conf &&
 pacman-key --recv-keys B9E36A7275FC61B464B67907E06FE8F53CDC6A4C && \
 pacman-key --finger    B9E36A7275FC61B464B67907E06FE8F53CDC6A4C && \
 pacman-key --lsign-key B9E36A7275FC61B464B67907E06FE8F53CDC6A4C && \

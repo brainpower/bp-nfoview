@@ -46,7 +46,7 @@ jobs:
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: System Information
         run: cat /etc/os-release
@@ -84,11 +84,12 @@ jobs:
   build_appimage:
     if: startsWith( github.ref, 'refs/tags/' )
     needs:
-      - build # only try this if basic build succeeds
-    # use the oldest supported to create the appimage, to make sure it runs almost everywhere
+      - build  # only try this if basic build succeeds
+    # use the oldest supported to create the appimage,
+    # to make sure it runs almost everywhere
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Check for system updates
         run: |
           sudo apt-get update
@@ -139,7 +140,7 @@ jobs:
     container:
       image: archlinux
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Prepare Cross Complie environment
         run: ./.github/workflows/scripts/prepare-cross-env.sh
@@ -169,14 +170,15 @@ jobs:
 
 
   create_release:
-    if: startsWith(github.ref, 'refs/tags/v') # only release tags starting with v
+    # only release tags starting with v
+    if: startsWith(github.ref, 'refs/tags/v')
     needs:
       - build_appimage
       - build_windows_exe
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Download AppImage artifact
         uses: actions/download-artifact@v4
