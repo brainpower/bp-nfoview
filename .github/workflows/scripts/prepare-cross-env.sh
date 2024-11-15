@@ -21,10 +21,10 @@ pacman -S --noconfirm --needed make ninja git cmake binutils patch base-devel un
 #echo "Server = https://martchus.no-ip.biz/repo/arch/\$repo/os/\$arch " >> /etc/pacman.conf && \
 
 # mingw builds
-sed -i "s@[extra]@[ownstuff]
-Server = https://ftp.f3l.de/~martchus/\$repo/os/\$arch
-Server = https://martchus.no-ip.biz/repo/arch/\$repo/os/\$arch
-
+sed -i "s@\[extra]@[ownstuff]\n\
+Server = https://ftp.f3l.de/~martchus/\$repo/os/\$arch\n\
+Server = https://martchus.no-ip.biz/repo/arch/\$repo/os/\$arch\n\
+\n\
 [extra]@" /etc/pacman.conf &&
 pacman-key --recv-keys B9E36A7275FC61B464B67907E06FE8F53CDC6A4C && \
 pacman-key --finger    B9E36A7275FC61B464B67907E06FE8F53CDC6A4C && \
