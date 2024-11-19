@@ -555,11 +555,17 @@ BPNVMainWindow::setupUi() {
   findLineEdit = new QLineEdit(findBar);
 
   QAction* findBarClose = new QAction(findBar);
-  findBarClose->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::WindowClose));
   QAction* findBarNext = new QAction(findBar);
-  findBarNext->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::GoDown));
   QAction* findBarPrev = new QAction(findBar);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+  findBarClose->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::WindowClose));
+  findBarNext->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::GoDown));
   findBarPrev->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::GoUp));
+#else
+  findBarClose->setIcon(QIcon::fromTheme("window-close"));
+  findBarNext->setIcon(QIcon::fromTheme("go-down"));
+  findBarPrev->setIcon(QIcon::fromTheme("go-up"));
+#endif
 
   QWidget* stretcher = new QWidget();
   stretcher->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
