@@ -51,12 +51,12 @@ jobs:
       - name: System Information
         run: cat /etc/os-release
       - name: apt update
-        run: sudo apt-get update
+        run: sudo apt-get -y update
       - name: apt upgrade
-        run: sudo apt-get remove firefox && sudo apt-get dist-upgrade
+        run: sudo apt-get remove firefox && sudo apt-get -y dist-upgrade
       - name: Install Qt
         run: |
-          sudo apt-get install \
+          sudo apt-get -y install \
             build-essential \
             ${{ matrix.qt_version.packages }} \
             cmake \
@@ -93,10 +93,10 @@ jobs:
       - name: Check for system updates
         run: |
           sudo apt-get update
-          sudo apt-get dist-upgrade
+          sudo apt-get -y dist-upgrade
       - name: Install Qt5 and build essentials
         run: |
-          sudo apt-get install build-essential qt5-default wget cmake ninja-build libgl1-mesa-dev libegl1-mesa-dev
+          sudo apt-get -y install build-essential fuse3 qt5-default wget cmake ninja-build libgl1-mesa-dev libegl1-mesa-dev
       - name: Download linuxdeploy
         run: |
           wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
@@ -192,15 +192,12 @@ jobs:
       - name: Create release draft
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref_name }}
         run: |
-          tag="${{ github.ref }}"
-          # Cut off the "refs/tags" prefix.
-          tag="${tag#"refs/tags/"}"
+          sudo apt-get install -y gh
           version="${tag#v}"
-          git tag -l --format=$'%(contents:subject)\n\n%(contents:body)' > release-msg.txt
-          hub release create \
+          gh release create "${tag}" \
             --draft \
-            --attach "bp-nfoview-${version}-x86_64.AppImage" \
-            --attach "bp-nfoview-${version}-x86_64.exe" \
-            --file "release-msg.txt" \
-            "${tag}"
+            --generate-notes \
+            "bp-nfoview-${version}-x86_64.AppImage" \
+            "bp-nfoview-${version}-x86_64.exe"

@@ -62,3 +62,7 @@ pacman -S --noconfirm \
 if [[ "$QTV" == "6" ]]; then
   pacman -S --noconfirm mingw-w64-qt"${QTV}"-5compat-static
 fi
+if [[ "$ACT" == "true" ]]; then
+  # we get run by nektosact.com - a local gh actions runner.
+  pacman -S --noconfirm nodejs-lts-jod
+fi
